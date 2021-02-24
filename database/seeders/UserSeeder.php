@@ -1,0 +1,53 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+class UserSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        DB::table('users')->insert([
+                [
+                    'cpf' => '512.490.302-34',
+                    'nome' => 'Teste de usuario',
+                    'nome_guerra' => 'Teste',
+                    'posto_grad' => 'Maj',
+                    'om_id' => 1,
+                    'user_type_id' => 1,
+                    'password' => Hash::make('123456')
+
+                ],
+                [
+                    'cpf' => '518.656.580-65',
+                    'nome' => 'outro teste de usuario',
+                    'nome_guerra' => 'Outro',
+                    'posto_grad' => 'Cel',
+                    'om_id' => 1,
+                    'user_type_id' => 2,
+                    'password' => Hash::make('123456')
+
+                ],
+                [
+                    'cpf' => '826.304.610-68',
+                    'nome' => 'Amigo da onça',
+                    'nome_guerra' => 'Onça',
+                    'posto_grad' => 'Cap',
+                    'om_id' => 2,
+                    'user_type_id' => 1,
+                    'password' => Hash::make('123456')
+
+                ]
+            ]
+        );
+    }
+}
