@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
                     'nome_guerra' => 'Teste',
                     'posto_grad' => 'Maj',
                     'om_id' => 1,
-                    'user_type_id' => 1,
+                    'tipo' => 'Administrador',
                     'password' => Hash::make('123456')
 
                 ],
@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
                     'nome_guerra' => 'Outro',
                     'posto_grad' => 'Cel',
                     'om_id' => 1,
-                    'user_type_id' => 2,
+                    'tipo' => 'Chamador',
                     'password' => Hash::make('123456')
 
                 ],
@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
                     'nome_guerra' => 'Onça',
                     'posto_grad' => 'Cap',
                     'om_id' => 2,
-                    'user_type_id' => 1,
+                    'tipo' => 'Administrador',
                     'password' => Hash::make('123456')
 
                 ]

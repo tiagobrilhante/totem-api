@@ -14,7 +14,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     use Authenticatable, Authorizable, HasFactory;
 
     protected $table = 'users';
-    protected $appends = ['user_type', 'om'];
+    protected $appends = ['om','guerra'];
 
 
     /**
@@ -28,7 +28,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'nome_guerra',
         'posto_grad',
         'om_id',
-        'user_type_id'
+        'tipo'
     ];
 
     /**
@@ -49,11 +49,17 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     }
 
-    public function getUserTypeAttribute()
+    public function getGuerraAttribute()
     {
-        return UserType::where('id', $this->user_type_id)->select('type')->first();
+        $user_posto_grad = $this->posto_grad;
+        $user_nome_guerra = $this->nome_guerra;
+        return
+
+            $user_posto_grad.' '.$user_nome_guerra;
 
     }
+
+
 
 
 }

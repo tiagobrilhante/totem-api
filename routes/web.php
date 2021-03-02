@@ -47,6 +47,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth' ], function () use ($r
         $router->get( '{id}', 'UserController@show');
         $router->put( '{id}', 'UserController@update');
         $router->delete( '{id}', 'UserController@destroy');
+        $router->post( 'cpf', 'UserController@cpfExist');
 
 
     });
