@@ -18,7 +18,7 @@ class UserController extends BaseController
 
         $id_usuario = $request['id'];
 
-        if ($id_usuario === '') {
+        if ($id_usuario === null) {
             $teste = User::where('cpf',$request['cpf'])->count();
 
         }else {
@@ -26,11 +26,7 @@ class UserController extends BaseController
 
         }
 
-        if ($teste > 0){
-            return false;
-        } else {
-            return true;
-        }
+        return  $teste;
 
     }
 
