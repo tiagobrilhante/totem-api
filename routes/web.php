@@ -30,13 +30,10 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth' ], function () use ($r
 
         $router->post( '', 'OmController@store');
         $router->get( '', 'OmController@index');
+        $router->get( 'disponivel', 'OmController@omsDisponives');
         $router->get( '{id}', 'OmController@show');
         $router->put( '{id}', 'OmController@update');
         $router->delete( '{id}', 'OmController@destroy');
-
-       // $router->get( 'users', 'OmController@withusers');
-
-        $router->get( '{serieId}/episodios', 'EpisodiosController@buscaPorSerie');
 
     });
 
@@ -51,31 +48,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth' ], function () use ($r
         $router->put( '{id}', 'UserController@update');
         $router->delete( '{id}', 'UserController@destroy');
         $router->post( 'cpf/', 'UserController@cpfExist');
-        $router->get( 'auth', 'UserController@usuarioLogado');
+        $router->post( 'tiposdisponiveis', 'UserController@retornaTipo');
 
-
-    });
-
-    $router->group(['prefix'=>'usertypes'], function () use ($router){
-
-        $router->post( '', 'UserTypeController@store');
-        $router->get( '', 'UserTypeController@index');
-        $router->get( '{id}', 'UserTypeController@show');
-        $router->put( '{id}', 'UserTypeController@update');
-        $router->delete( '{id}', 'UserTypeController@destroy');
-
-       // $router->get( 'users', 'UserTypeController@withusers');
-
-
-    });
-
-    $router->group(['prefix'=>'episodios'], function () use ($router){
-
-        $router->post( '', 'EpisodiosController@store');
-        $router->get( '', 'EpisodiosController@index');
-        $router->get( '{id}', 'EpisodiosController@show');
-        $router->put( '{id}', 'EpisodiosController@update');
-        $router->delete( '{id}', 'EpisodiosController@destroy');
 
     });
 

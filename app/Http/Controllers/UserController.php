@@ -8,11 +8,26 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 
-class UserController extends BaseController
+class UserController extends Controller
 {
-    public function __construct()
+
+    //lista os usuários de acordo com o tipo e OM
+    public function index(Request $request)
     {
-        $this->classe = User::class;
+
+        if (Auth::user()->tipo === 'Administrador Geral') {
+
+            return User::paginate($request->per_page);
+
+        } elseif (Auth::user()->tipo === 'Administrador') {
+
+            return User::where('om_id', Auth::user()->om_id)->where('tipo','!=', 'Administrador Geral')->paginate($request->per_page);
+
+        } else {
+
+            return response()
+                ->json('', 403);
+        }
 
     }
 
@@ -28,25 +43,9 @@ class UserController extends BaseController
         return $teste;
     }
 
-    // cria um novo usuário
-    public function createUser(Request $request)
-    {
-        return response()
-            ->json(User::create([
-                'nome' => $request['nome'],
-                'nome_guerra' => $request['nome_guerra'],
-                'posto_grad' => $request['posto_grad'],
-                'cpf' => $request['cpf'],
-                'password' => Hash::make($this->limpaCPF_CNPJ($request['cpf'])),
-                'om_id' => $request['om'],
-                'tipo' => $request['tipo'],
-                'reset' => 1
-    ]), 201);
-
-    }
-
     //limpa os . e - de um cpf para resetar senha
-    function limpaCPF_CNPJ($valor){
+    function limpaCPF_CNPJ($valor)
+    {
         $valor = trim($valor);
         $valor = str_replace(".", "", $valor);
         $valor = str_replace(",", "", $valor);
@@ -75,10 +74,76 @@ class UserController extends BaseController
         return $user;
     }
 
-    //devolve o usuário logado
-    public function usuarioLogado()
+    // cria um novo usuário
+    public function createUser(Request $request)
     {
-        return Auth::user();
+        return response()
+            ->json(User::create([
+                'nome' => $request['nome'],
+                'nome_guerra' => $request['nome_guerra'],
+                'posto_grad' => $request['posto_grad'],
+                'cpf' => $request['cpf'],
+                'password' => Hash::make($this->limpaCPF_CNPJ($request['cpf'])),
+                'om_id' => $request['om'],
+                'tipo' => $request['tipo'],
+                'reset' => 1
+            ]), 201);
+
     }
+
+    // altera um usuário
+    public function update(int $id, Request $request)
+    {
+
+        $usuario = User::find($id);
+
+        if (is_null($usuario)) {
+
+            return response()->json([
+                'erro' => 'Recurso não encontrado'
+            ], 404);
+
+        }
+
+        $usuario->fill($request->all());
+        $usuario->save();
+
+        return $usuario;
+
+    }
+
+    // remove um usuário
+    public function destroy($id)
+    {
+
+        $usuario = User::destroy($id);
+
+        if ($usuario === 0) {
+
+            return response()->json([
+                'erro' => 'Recurso não encontrado'
+            ], 404);
+
+        } else {
+            return response()->json('', 204);
+        }
+
+    }
+
+    // devolve os tipos de usuários disponíveis para um tipo de usuário
+    public function retornaTipo(Request $request)
+    {
+
+        $array_tipos = [];
+
+        if (Auth::user()->tipo === 'Administrador Geral') {
+            array_push($array_tipos, 'Administrador','Administrador Geral','Chamador');
+        } elseif (Auth::user()->tipo === 'Administrador'){
+            array_push($array_tipos, 'Administrador','Chamador');
+        }
+
+        return $array_tipos;
+    }
+
 
 }

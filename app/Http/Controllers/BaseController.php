@@ -42,8 +42,6 @@ abstract  class BaseController
     public function update(int $id, Request $request)
     {
 
-
-
         $recurso = $this->classe::find($id);
 
 
