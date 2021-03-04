@@ -43,11 +43,15 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth' ], function () use ($r
     $router->group(['prefix'=>'users'], function () use ($router){
 
         $router->post( '', 'UserController@store');
+        $router->post( 'create', 'UserController@createUser');
+        $router->post( '/password/reset', 'UserController@alteraSenhaResetada');
+        $router->post( '/reset/password', 'UserController@resetaSenha');
         $router->get( '', 'UserController@index');
         $router->get( '{id}', 'UserController@show');
         $router->put( '{id}', 'UserController@update');
         $router->delete( '{id}', 'UserController@destroy');
-        $router->post( 'cpf', 'UserController@cpfExist');
+        $router->post( 'cpf/', 'UserController@cpfExist');
+        $router->get( 'auth', 'UserController@usuarioLogado');
 
 
     });

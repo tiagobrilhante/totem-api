@@ -28,7 +28,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'nome_guerra',
         'posto_grad',
         'om_id',
-        'tipo'
+        'tipo',
+        'password',
+        'reset'
     ];
 
     /**

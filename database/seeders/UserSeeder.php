@@ -24,7 +24,8 @@ class UserSeeder extends Seeder
                     'posto_grad' => 'Maj',
                     'om_id' => 1,
                     'tipo' => 'Administrador',
-                    'password' => Hash::make('123456')
+                    'password' => Hash::make('123456'),
+                    'reset' => 0
 
                 ],
                 [
@@ -34,7 +35,8 @@ class UserSeeder extends Seeder
                     'posto_grad' => 'Cel',
                     'om_id' => 1,
                     'tipo' => 'Chamador',
-                    'password' => Hash::make('123456')
+                    'password' => Hash::make('123456'),
+                    'reset' => 0
 
                 ],
                 [
@@ -44,7 +46,8 @@ class UserSeeder extends Seeder
                     'posto_grad' => 'Cap',
                     'om_id' => 2,
                     'tipo' => 'Administrador',
-                    'password' => Hash::make('123456')
+                    'password' => Hash::make('123456'),
+                    'reset' => 0
 
                 ]
             ]

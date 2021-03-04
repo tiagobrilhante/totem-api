@@ -21,6 +21,7 @@ class CriarTabelaUsers extends Migration
             $table->string('posto_grad');
             $table->string('tipo');
             $table->string('password');
+            $table->boolean('reset');
             $table->bigInteger('om_id')->unsigned()->index();
 
             $table->timestamps();

@@ -13,7 +13,7 @@ abstract  class BaseController
     public function index(Request $request)
     {
        return $this->classe::paginate($request->per_page);
-        //return $this->classe::all();
+
     }
 
     public function store(Request $request)
