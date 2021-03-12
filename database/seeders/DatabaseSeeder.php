@@ -15,7 +15,11 @@ class DatabaseSeeder extends Seeder
     {
          $this->call([
              OmSeeder::class,
-             UserSeeder::class
+             UserSeeder::class,
+             PanelSeeder::class,
+             GuicheSeeder::class,
+             ChamadaNormalParametroSeeder::class,
+             ChamadaPrioridadeParametroSeeder::class
          ]);
     }
 }

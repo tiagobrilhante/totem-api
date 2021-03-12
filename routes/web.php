@@ -13,7 +13,7 @@
 |
 */
 
-/** @var \Laravel\Lumen\Routing\Router  $router */
+/** @var \Laravel\Lumen\Routing\Router $router */
 
 $router->get('/', function () use ($router) {
     return $router->app->version();
@@ -23,32 +23,72 @@ $router->get('/', function () use ($router) {
 $router->post('/api/login', 'TokenController@gerarToken');
 
 
+$router->post('/api/myip', 'IpController@myIp');
 
-$router->group(['prefix' => 'api', 'middleware' => 'auth' ], function () use ($router){
+$router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {
 
-    $router->group(['prefix'=>'om'], function () use ($router){
+    $router->group(['prefix' => 'om'], function () use ($router) {
 
-        $router->post( '', 'OmController@store');
-        $router->get( '', 'OmController@index');
-        $router->get( 'disponivel', 'OmController@omsDisponives');
-        $router->get( '{id}', 'OmController@show');
-        $router->put( '{id}', 'OmController@update');
-        $router->delete( '{id}', 'OmController@destroy');
+        $router->post('', 'OmController@store');
+        $router->get('', 'OmController@index');
+        $router->get('disponivel', 'OmController@omsDisponives');
+        $router->get('{id}', 'OmController@show');
+        $router->put('{id}', 'OmController@update');
+        $router->delete('{id}', 'OmController@destroy');
 
     });
 
-    $router->group(['prefix'=>'users'], function () use ($router){
+    $router->group(['prefix' => 'panels'], function () use ($router) {
 
-        $router->post( '', 'UserController@store');
-        $router->post( 'create', 'UserController@createUser');
-        $router->post( '/password/reset', 'UserController@alteraSenhaResetada');
-        $router->post( '/reset/password', 'UserController@resetaSenha');
-        $router->get( '', 'UserController@index');
-        $router->get( '{id}', 'UserController@show');
-        $router->put( '{id}', 'UserController@update');
-        $router->delete( '{id}', 'UserController@destroy');
-        $router->post( 'cpf/', 'UserController@cpfExist');
-        $router->post( 'tiposdisponiveis', 'UserController@retornaTipo');
+        $router->post('', 'PanelController@store');
+        $router->get('', 'PanelController@index');
+        $router->get('{id}', 'PanelController@show');
+        $router->put('{id}', 'PanelController@update');
+        $router->delete('{id}', 'PanelController@destroy');
+
+    });
+
+    $router->group(['prefix' => 'parametronormal'], function () use ($router) {
+
+        $router->post('', 'ChamadaNormalParametrosController@store');
+        $router->get('', 'ChamadaNormalParametrosController@index');
+        $router->get('{id}', 'ChamadaNormalParametrosController@show');
+        $router->put('{id}', 'ChamadaNormalParametrosController@update');
+        $router->delete('{id}', 'ChamadaNormalParametrosController@destroy');
+
+    });
+    $router->group(['prefix' => 'parametroprioridade'], function () use ($router) {
+
+        $router->post('', 'ChamadaPrioridadeParametrosController@store');
+        $router->get('', 'ChamadaPrioridadeParametrosController@index');
+        $router->get('{id}', 'ChamadaPrioridadeParametrosController@show');
+        $router->put('{id}', 'ChamadaPrioridadeParametrosController@update');
+        $router->delete('{id}', 'ChamadaPrioridadeParametrosController@destroy');
+
+    });
+
+    $router->group(['prefix' => 'guiches'], function () use ($router) {
+
+        $router->post('', 'GuicheController@store');
+        $router->get('', 'GuicheController@index');
+        $router->get('{id}', 'GuicheController@show');
+        $router->put('{id}', 'GuicheController@update');
+        $router->delete('{id}', 'GuicheController@destroy');
+
+    });
+
+    $router->group(['prefix' => 'users'], function () use ($router) {
+
+        $router->post('', 'UserController@store');
+        $router->post('create', 'UserController@createUser');
+        $router->post('/password/reset', 'UserController@alteraSenhaResetada');
+        $router->post('/reset/password', 'UserController@resetaSenha');
+        $router->get('', 'UserController@index');
+        $router->get('{id}', 'UserController@show');
+        $router->put('{id}', 'UserController@update');
+        $router->delete('{id}', 'UserController@destroy');
+        $router->post('cpf/', 'UserController@cpfExist');
+        $router->post('tiposdisponiveis', 'UserController@retornaTipo');
 
 
     });

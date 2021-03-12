@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
                     'nome_guerra' => 'Teste',
                     'posto_grad' => 'Maj',
                     'om_id' => 1,
-                    'tipo' => 'Administrador',
+                    'tipo' => 'Administrador Geral',
                     'password' => Hash::make('123456'),
                     'reset' => 0
 
