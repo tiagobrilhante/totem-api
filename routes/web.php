@@ -52,18 +52,15 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
         $router->post('', 'ChamadaNormalParametrosController@store');
         $router->get('', 'ChamadaNormalParametrosController@index');
-        $router->get('{id}', 'ChamadaNormalParametrosController@show');
-        $router->put('{id}', 'ChamadaNormalParametrosController@update');
-        $router->delete('{id}', 'ChamadaNormalParametrosController@destroy');
+        $router->get('last', 'ChamadaNormalParametrosController@last');
 
     });
     $router->group(['prefix' => 'parametroprioridade'], function () use ($router) {
 
         $router->post('', 'ChamadaPrioridadeParametrosController@store');
         $router->get('', 'ChamadaPrioridadeParametrosController@index');
-        $router->get('{id}', 'ChamadaPrioridadeParametrosController@show');
-        $router->put('{id}', 'ChamadaPrioridadeParametrosController@update');
-        $router->delete('{id}', 'ChamadaPrioridadeParametrosController@destroy');
+        $router->get('last', 'ChamadaPrioridadeParametrosController@last');
+
 
     });
 

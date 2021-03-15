@@ -19,6 +19,12 @@ class CriarTabelaChamadaNormalParametros extends Migration
             $table->date('data_ref');
             $table->string('responsavel');
 
+            $table->bigInteger('om_id')->unsigned()->index();
+
+            $table->foreign('om_id')
+                ->references('id')
+                ->on('oms');
+
             $table->timestamps();
             $table->softDeletes();
         });
