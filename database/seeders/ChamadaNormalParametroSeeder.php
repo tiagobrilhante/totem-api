@@ -22,14 +22,16 @@ class ChamadaNormalParametroSeeder extends Seeder
                 'numero_inicial' => 1,
                 'data_ref' => '2021-02-01',
                 'responsavel' => 'Maj Brilhante',
-                'om_id'=>1
+                'validacao' => 'Ok',
+                'panel_id'=>1
             ],
             [
                 'id' => 2,
                 'numero_inicial' => 10,
                 'data_ref' => '2021-02-13',
                 'responsavel' => 'Maj Brilhante',
-                'om_id'=>2
+                'validacao' => 'Ok',
+                'panel_id'=>2
             ]
         ]);
     }

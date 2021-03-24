@@ -9,6 +9,7 @@ class Om extends Model
 
     protected $fillable =['nome','sigla','cor'];
     protected $perPage = 10;
+    protected $appends = ['panel'];
 
 
     public function users()
@@ -16,5 +17,14 @@ class Om extends Model
         return $this->hasMany( User::class);
 
     }
+
+    public function getPanelAttribute()
+    {
+        return
+
+            Panel::where('om_id', $this->id)->get();
+
+    }
+
 
 }

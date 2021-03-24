@@ -8,16 +8,19 @@ class Panel extends Model
 {
 
     protected $fillable = ['ip', 'localizacao', 'cor', 'om_id'];
-    protected $appends = ['om'];
     protected $perPage = 10;
 
-    public function getOmAttribute()
+
+    public function guiche()
     {
-        return
-
-            Om::where('id', $this->om_id)->first();
-
+        return $this->hasMany(Guiche::class);
     }
+    public function om()
+    {
+        return $this->belongsTo(Om::class);
+    }
+
+
 
 
 }

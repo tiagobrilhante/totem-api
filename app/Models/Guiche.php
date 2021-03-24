@@ -7,17 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Guiche extends Model
 {
 
-    protected $fillable = ['ip', 'localizacao', 'nome_ref', 'cor', 'om_id'];
-    protected $appends = ['om'];
+    protected $fillable = ['ip', 'localizacao', 'nome_ref', 'cor', 'panel_id'];
     protected $perPage = 10;
 
-    public function getOmAttribute()
+
+    public function panel()
     {
-        return
-
-            Om::where('id', $this->om_id)->first();
-
+        return $this->belongsTo(Panel::class);
     }
-
 
 }

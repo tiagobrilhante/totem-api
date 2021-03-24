@@ -18,11 +18,13 @@ class CriarTabelaChamadaPrioridadeParametros extends Migration
             $table->bigInteger('numero_inicial');
             $table->date('data_ref');
             $table->string('responsavel');
-            $table->bigInteger('om_id')->unsigned()->index();
+            $table->string('validacao');
 
-            $table->foreign('om_id')
+            $table->bigInteger('panel_id')->unsigned()->index();
+
+            $table->foreign('panel_id')
                 ->references('id')
-                ->on('oms');
+                ->on('panels');
 
             $table->timestamps();
             $table->softDeletes();

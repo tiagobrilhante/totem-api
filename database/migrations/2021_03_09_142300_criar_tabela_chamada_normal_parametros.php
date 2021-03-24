@@ -18,12 +18,13 @@ class CriarTabelaChamadaNormalParametros extends Migration
             $table->bigInteger('numero_inicial');
             $table->date('data_ref');
             $table->string('responsavel');
+            $table->string('validacao');
 
-            $table->bigInteger('om_id')->unsigned()->index();
+            $table->bigInteger('panel_id')->unsigned()->index();
 
-            $table->foreign('om_id')
+            $table->foreign('panel_id')
                 ->references('id')
-                ->on('oms');
+                ->on('panels');
 
             $table->timestamps();
             $table->softDeletes();

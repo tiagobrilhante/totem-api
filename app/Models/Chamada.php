@@ -7,8 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class Chamada extends Model
 {
 
-    protected $fillable = ['panel_id', 'tipo', 'preferencial', 'guiche_id', 'ref', 'rechamada'];
-    protected $appends = ['panel','guiche'];
+    protected $fillable = [
+        'panel_id',
+        'tipo',
+        'tipo_atendimento',
+        'tipo_atendimento_id',
+        'guiche_id',
+        'numero_ref',
+        'nome_ref',
+        'chamador',
+        'rechamada',
+        'status'
+    ];
+    protected $appends = ['panel', 'guiche'];
     protected $perPage = 10;
 
     public function getPanelAttribute()
@@ -18,6 +29,7 @@ class Chamada extends Model
             Panel::where('id', $this->panel_id)->first();
 
     }
+
     public function getGuicheAttribute()
     {
         return

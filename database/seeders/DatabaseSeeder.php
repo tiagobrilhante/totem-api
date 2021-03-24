@@ -19,7 +19,9 @@ class DatabaseSeeder extends Seeder
              PanelSeeder::class,
              GuicheSeeder::class,
              ChamadaNormalParametroSeeder::class,
-             ChamadaPrioridadeParametroSeeder::class
+             ChamadaPrioridadeParametroSeeder::class,
+             TipoAtendimentoSeeder::class,
+             ChamadaSeeder::class
          ]);
     }
 }

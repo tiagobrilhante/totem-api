@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CriarTabelaGuiches extends Migration
+class CriarTabelaTipoAtendimentos extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,15 @@ class CriarTabelaGuiches extends Migration
      */
     public function up()
     {
-        Schema::create('guiches', function (Blueprint $table) {
+        Schema::create('tipo_atendimentos', function (Blueprint $table) {
             $table->id();
-            $table->string('ip');
-            $table->string('localizacao');
-            $table->string('nome_ref');
+            $table->string('tipo');
             $table->string('cor');
+            $table->bigInteger('om_id')->unsigned()->index();
 
-            $table->bigInteger('panel_id')->unsigned()->index();
-
-            $table->foreign('panel_id')
+            $table->foreign('om_id')
                 ->references('id')
-                ->on('panels')->onDelete('cascade');
+                ->on('oms')->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();
@@ -38,6 +35,6 @@ class CriarTabelaGuiches extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('guiches');
+        Schema::dropIfExists('tipo_atendimentos');
     }
 }

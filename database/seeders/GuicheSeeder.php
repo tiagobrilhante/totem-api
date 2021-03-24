@@ -22,7 +22,7 @@ class GuicheSeeder extends Seeder
                 'ip' => '192.168.0.134',
                 'localizacao' => 'SSIP / 12',
                 'nome_ref' => '1 A',
-                'om_id' => 1,
+                'panel_id' => 1,
                 'cor' => '#000FFF'
             ],
             [
@@ -30,7 +30,7 @@ class GuicheSeeder extends Seeder
                 'ip' => '192.168.0.156',
                 'localizacao' => 'Comando Operacional',
                 'nome_ref' => '3 B',
-                'om_id' => 2,
+                'panel_id' => 1,
                 'cor' => '#000000'
             ]
         ]);

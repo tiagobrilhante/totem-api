@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ChamadaNormalParametro extends Model
 {
 
-    protected $fillable = ['numero_inicial', 'data_ref', 'responsavel', 'om_id'];
+    protected $fillable = ['numero_inicial', 'data_ref', 'responsavel', 'panel_id','validacao'];
 
 
 }

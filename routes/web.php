@@ -42,9 +42,22 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
         $router->post('', 'PanelController@store');
         $router->get('', 'PanelController@index');
+        $router->get('load', 'PanelController@indexLoad');
+        $router->get('showpanel', 'PanelController@showPanel');
         $router->get('{id}', 'PanelController@show');
         $router->put('{id}', 'PanelController@update');
         $router->delete('{id}', 'PanelController@destroy');
+
+    });
+
+    $router->group(['prefix' => 'tipoatendimento'], function () use ($router) {
+
+        $router->get('alltipos', 'TipoAtendimentoController@tiposOm');
+        $router->post('', 'TipoAtendimentoController@store');
+        $router->get('', 'TipoAtendimentoController@index');
+        $router->get('{id}', 'TipoAtendimentoController@show');
+        $router->put('{id}', 'TipoAtendimentoController@update');
+        $router->delete('{id}', 'TipoAtendimentoController@destroy');
 
     });
 
@@ -63,11 +76,32 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
 
     });
+    $router->group(['prefix' => 'parametrochamada'], function () use ($router) {
+
+        $router->get('checa', 'ParametroChamadaController@verificaParametros');
+
+    });
+
+    $router->group(['prefix' => 'chamadas'], function () use ($router) {
+
+        $router->get('mycalls/normal', 'ChamadasController@myCallsNormal');
+        $router->get('mycalls/preferencial', 'ChamadasController@myCallsPreferencial');
+        $router->get('mycalls/nominal', 'ChamadasController@myCallsNominal');
+        $router->get('previsao', 'ChamadasController@previsaoChamada');
+        $router->post('chama', 'ChamadasController@geraChamada');
+        $router->get('aberto', 'ChamadasController@checaAberto');
+        $router->get('descarta/{id}', 'ChamadasController@descartaAtiva');
+        $router->post('finaliza', 'ChamadasController@finalizaAtiva');
+        $router->get('rechamada/{id}', 'ChamadasController@rechamadaAtiva');
+
+    });
 
     $router->group(['prefix' => 'guiches'], function () use ($router) {
 
         $router->post('', 'GuicheController@store');
+        $router->get('load', 'GuicheController@indexLoad');
         $router->get('', 'GuicheController@index');
+        $router->get('myguiche', 'GuicheController@myGuiche');
         $router->get('{id}', 'GuicheController@show');
         $router->put('{id}', 'GuicheController@update');
         $router->delete('{id}', 'GuicheController@destroy');

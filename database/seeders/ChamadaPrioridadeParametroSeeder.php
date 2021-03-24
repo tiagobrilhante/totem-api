@@ -22,7 +22,8 @@ class ChamadaPrioridadeParametroSeeder extends Seeder
                 'numero_inicial' => 7,
                 'data_ref' => '2021-01-01',
                 'responsavel' => 'Maj Brilhante',
-                'om_id'=>1
+                'validacao' => 'Ok',
+                'panel_id'=>1
             ]
         ]);
     }
