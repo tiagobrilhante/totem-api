@@ -6,6 +6,7 @@ use App\Models\Chamada;
 use App\Models\ChamadaNormalParametro;
 use App\Models\ChamadaPrioridadeParametro;
 use App\Models\Guiche;
+use App\Models\PublicoAlvo;
 use App\Models\TipoAtendimento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -61,6 +62,8 @@ class ChamadasController extends Controller
         $guiche = Guiche::find(1);
         $panel = $guiche->panel;
 
+
+
         // preciso verificar se existem chamados no dia de hj
         $verifica_chamados_normais = Chamada::where('tipo', 'Normal')->where('created_at', 'LIKE', "$diaHoje%")->count();
 
@@ -81,7 +84,8 @@ class ChamadasController extends Controller
 
             $previsao_normal = ChamadaNormalParametro::where('data_ref', $diaHoje)->where('validacao', '!=', 'OK')->orderBy('id', 'DESC')->count();
 
-            if ($previsao_normal != 0) {
+
+            if ($previsao_normal == 0) {
                 // nesse caso, todos os parametros já foram usados , então vale o último numero chamado + 1
 
                 $verifica_ult_chamado_normal = Chamada::where('tipo', 'Normal')->where('created_at', 'LIKE', "$diaHoje%")->orderBy('id', 'DESC')->first();
@@ -118,7 +122,7 @@ class ChamadasController extends Controller
 
             $previsao_preferencial = ChamadaPrioridadeParametro::where('data_ref', $diaHoje)->where('validacao', '!=', 'OK')->orderBy('id', 'DESC')->count();
 
-            if ($previsao_preferencial != 0) {
+            if ($previsao_preferencial == 0) {
                 // nesse caso, todos os parametros já foram usados , então vale o último numero chamado + 1
 
                 $verifica_ult_chamado_preferencial = Chamada::where('tipo', 'Preferencial')->where('created_at', 'LIKE', "$diaHoje%")->orderBy('id', 'DESC')->first();
@@ -266,15 +270,21 @@ class ChamadasController extends Controller
 
         // primeiro encontro o tipo de atendimento
         $tipoAtendimento = TipoAtendimento::find($request->tipo_atendimento);
+
+        // encontro o público alvo
+        $publicoAlvo = PublicoAlvo::find($request->publico_alvo);
+
         // encontro a chamada em questão
         // tenho que ver se essa chamada pertence ao guiche (implementar depois)
         $chamada = Chamada::find($request->id_chamada);
 
-        // atribuo o tipo de chamada para finalizar
+        // atribuo o tipo de chamada e o publico alvo para finalizar
         //status OK
 
         $chamada->tipo_atendimento_id = $tipoAtendimento->id;
         $chamada->tipo_atendimento = $tipoAtendimento->tipo;
+        $chamada->publico_alvo_id = $publicoAlvo->id;
+        $chamada->publico_alvo = $publicoAlvo->tipo;
         $chamada->status = 'Ok';
         $chamada->save();
 

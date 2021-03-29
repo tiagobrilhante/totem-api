@@ -18,6 +18,7 @@ class CriarTabelaChamadas extends Migration
             $table->id();
             $table->string('tipo');
             $table->string('tipo_atendimento')->nullable();
+            $table->string('publico_alvo')->nullable();
             $table->bigInteger('numero_ref')->nullable();
             $table->string('nome_ref')->nullable();
             $table->string('status');
@@ -38,6 +39,11 @@ class CriarTabelaChamadas extends Migration
             $table->foreign('tipo_atendimento_id')
                 ->references('id')
                 ->on('tipo_atendimentos')->onDelete('cascade');
+
+            $table->bigInteger('publico_alvo_id')->unsigned()->index()->nullable();
+            $table->foreign('publico_alvo_id')
+                ->references('id')
+                ->on('publico_alvos')->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();

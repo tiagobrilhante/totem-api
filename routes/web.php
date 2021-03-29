@@ -61,6 +61,17 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     });
 
+    $router->group(['prefix' => 'publicoalvo'], function () use ($router) {
+
+        $router->get('alltipos', 'PublicoAlvoController@tiposOm');
+        $router->post('', 'PublicoAlvoController@store');
+        $router->get('', 'PublicoAlvoController@index');
+        $router->get('{id}', 'PublicoAlvoController@show');
+        $router->put('{id}', 'PublicoAlvoController@update');
+        $router->delete('{id}', 'PublicoAlvoController@destroy');
+
+    });
+
     $router->group(['prefix' => 'parametronormal'], function () use ($router) {
 
         $router->post('', 'ChamadaNormalParametrosController@store');

@@ -12,6 +12,8 @@ class Chamada extends Model
         'tipo',
         'tipo_atendimento',
         'tipo_atendimento_id',
+        'publico_alvo',
+        'publico_alvo_id',
         'guiche_id',
         'numero_ref',
         'nome_ref',
