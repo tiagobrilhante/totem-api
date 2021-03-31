@@ -19,7 +19,7 @@ class PublicoAlvoSeeder extends Seeder
         DB::table('publico_alvos')->insert([
             [
                 'id' => 1,
-                'tipo' => 'Veterano',
+                'tipo' => 'Veterano Oficial',
                 'om_id' => 1,
                 'cor' => '#000FFF'
             ],
@@ -34,7 +34,19 @@ class PublicoAlvoSeeder extends Seeder
                 'tipo' => 'Pensionista Militar',
                 'om_id' => 1,
                 'cor' => '#CCC000'
-            ]
+            ],
+            [
+                'id' => 4,
+                'tipo' => 'Veterano Praça',
+                'om_id' => 1,
+                'cor' => '#FFFDDD'
+            ],
+            [
+                'id' => 5,
+                'tipo' => 'Servidor Civil Aposentado',
+                'om_id' => 1,
+                'cor' => '#AAA000'
+            ],
         ]);
     }
 }

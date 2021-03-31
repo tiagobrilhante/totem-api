@@ -54,12 +54,20 @@ class UserController extends Controller
         return $valor;
     }
 
-    // altera a senha de um usuário
+    // altera a senha de um usuário resetado
     public function alteraSenhaResetada(Request $request)
     {
         $user = User::find($request['id']);
         $user->password = Hash::make($request['password']);
         $user->reset = 0;
+        $user->save();
+    }
+
+    // altera a senha de um usuário normal
+    public function alteraSenhaNormal(Request $request)
+    {
+        $user = User::find(Auth::user()->id);
+        $user->password = Hash::make($request['password']);
         $user->save();
     }
 

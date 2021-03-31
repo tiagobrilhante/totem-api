@@ -25,6 +25,13 @@ $router->post('/api/login', 'TokenController@gerarToken');
 
 $router->post('/api/myip', 'IpController@myIp');
 
+$router->group(['prefix' => '/api/painelchamada'], function () use ($router) {
+
+    $router->get('', 'PainelChamadasController@chamadasPainel');
+    $router->get('panel', 'PainelChamadasController@painelAtivo');
+
+});
+
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {
 
     $router->group(['prefix' => 'om'], function () use ($router) {
@@ -124,6 +131,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
         $router->post('', 'UserController@store');
         $router->post('create', 'UserController@createUser');
         $router->post('/password/reset', 'UserController@alteraSenhaResetada');
+        $router->post('/password/change', 'UserController@alteraSenhaNormal');
         $router->post('/reset/password', 'UserController@resetaSenha');
         $router->get('', 'UserController@index');
         $router->get('{id}', 'UserController@show');

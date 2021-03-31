@@ -30,7 +30,6 @@ class ChamadaSeeder extends Seeder
                 'status'=>'OK',
                 'chamador'=>'Cel Outro',
                 'rechamada'=>false,
-                'tipo_atendimento_id'=> 1,
                 'created_at'=> '2021-02-01 12:00:00'
 
 
@@ -48,7 +47,6 @@ class ChamadaSeeder extends Seeder
                 'status'=>'OK',
                 'chamador'=>'Cel Outro',
                 'rechamada'=>false,
-                'tipo_atendimento_id'=> 1,
                 'created_at'=>'2021-02-13 13:00:01'
 
             ],
@@ -65,7 +63,6 @@ class ChamadaSeeder extends Seeder
                 'status'=>'OK',
                 'chamador'=>'Cel Outro',
                 'rechamada'=>false,
-                'tipo_atendimento_id'=> 1,
                 'created_at'=>'2021-01-01 10:00:01'
 
             ],

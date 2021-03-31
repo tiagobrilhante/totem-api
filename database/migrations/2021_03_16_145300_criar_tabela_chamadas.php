@@ -35,11 +35,6 @@ class CriarTabelaChamadas extends Migration
                 ->references('id')
                 ->on('guiches')->onDelete('cascade');
 
-            $table->bigInteger('tipo_atendimento_id')->unsigned()->index()->nullable();
-            $table->foreign('tipo_atendimento_id')
-                ->references('id')
-                ->on('tipo_atendimentos')->onDelete('cascade');
-
             $table->bigInteger('publico_alvo_id')->unsigned()->index()->nullable();
             $table->foreign('publico_alvo_id')
                 ->references('id')

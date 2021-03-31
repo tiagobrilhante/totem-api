@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
              ChamadaPrioridadeParametroSeeder::class,
              TipoAtendimentoSeeder::class,
              PublicoAlvoSeeder::class,
-             ChamadaSeeder::class
+             ChamadaSeeder::class,
+             TipoAtendimentoChamadaSeeder::class
          ]);
     }
 }

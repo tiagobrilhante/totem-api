@@ -11,7 +11,6 @@ class Chamada extends Model
         'panel_id',
         'tipo',
         'tipo_atendimento',
-        'tipo_atendimento_id',
         'publico_alvo',
         'publico_alvo_id',
         'guiche_id',
@@ -39,5 +38,12 @@ class Chamada extends Model
             Guiche::where('id', $this->guiche_id)->first();
 
     }
+
+    public function chamadaTipoAtendimento()
+    {
+        return $this->hasMany( ChamadaTipoAtendimento::class);
+
+    }
+
 
 }

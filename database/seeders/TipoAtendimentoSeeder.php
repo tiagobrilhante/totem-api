@@ -31,9 +31,27 @@ class TipoAtendimentoSeeder extends Seeder
             ],
             [
                 'id' => 3,
-                'tipo' => 'Cota Parte',
+                'tipo' => 'Transferência de Cota Parte',
                 'om_id' => 1,
                 'cor' => '#CCC000'
+            ],
+            [
+                'id' => 4,
+                'tipo' => 'Declaração Provisória do FuSEx',
+                'om_id' => 1,
+                'cor' => '#CCCAAA'
+            ],
+            [
+                'id' => 5,
+                'tipo' => 'Isenção de Imposto de Renda',
+                'om_id' => 1,
+                'cor' => '#CCCDDD'
+            ],
+            [
+                'id' => 6,
+                'tipo' => 'Comprovação de Invalidez',
+                'om_id' => 1,
+                'cor' => '#DDDFFF'
             ]
         ]);
     }

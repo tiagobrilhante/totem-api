@@ -17,7 +17,13 @@ class PublicoAlvoController extends BaseController
     // retorna lista de tipos por OM
     public function tiposOm(Request $request)
     {
-        return PublicoAlvo::where('om_id',Auth::user()->om_id)->orderBy('id','DESC')->paginate($request->per_page);
+
+        if (Auth::user()->tipo === 'Administrador Geral') {
+            return PublicoAlvo::orderBy('id','DESC')->paginate($request->per_page);
+        } else {
+            return PublicoAlvo::where('om_id',Auth::user()->om_id)->orderBy('id','DESC')->paginate($request->per_page);
+        }
+
 
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Chamada;
 use App\Models\ChamadaNormalParametro;
 use App\Models\ChamadaPrioridadeParametro;
+use App\Models\ChamadaTipoAtendimento;
 use App\Models\Guiche;
 use App\Models\PublicoAlvo;
 use App\Models\TipoAtendimento;
@@ -20,7 +21,7 @@ class ChamadasController extends Controller
         //$guiche = Guiche::where('ip', $request->ip())->first();
         $guiche = Guiche::find(1);
 
-        return Chamada::where('tipo', 'Normal')->where('guiche_id', $guiche->id)->get();
+        return Chamada::where('tipo', 'Normal')->where('guiche_id', $guiche->id)->get()->load('chamadaTipoAtendimento.tipoAtendimento');
     }
 
     public function myCallsPreferencial()
@@ -29,7 +30,7 @@ class ChamadasController extends Controller
         //$guiche = Guiche::where('ip', $request->ip())->first();
         $guiche = Guiche::find(1);
 
-        return Chamada::where('tipo', 'Preferencial')->where('guiche_id', $guiche->id)->get();
+        return Chamada::where('tipo', 'Preferencial')->where('guiche_id', $guiche->id)->get()->load('chamadaTipoAtendimento.tipoAtendimento');
 
     }
 
@@ -39,7 +40,7 @@ class ChamadasController extends Controller
         //$guiche = Guiche::where('ip', $request->ip())->first();
         $guiche = Guiche::find(1);
 
-        return Chamada::where('tipo', 'Nominal')->where('guiche_id', $guiche->id)->get();
+        return Chamada::where('tipo', 'Nominal')->where('guiche_id', $guiche->id)->get()->load('chamadaTipoAtendimento.tipoAtendimento');
 
     }
 
@@ -61,7 +62,6 @@ class ChamadasController extends Controller
         //$guiche = Guiche::where('ip', $request->ip())->first();
         $guiche = Guiche::find(1);
         $panel = $guiche->panel;
-
 
 
         // preciso verificar se existem chamados no dia de hj
@@ -173,8 +173,7 @@ class ChamadasController extends Controller
             'status' => 'Aguardando',
             'chamador' => $usuario,
             'rechamada' => false,
-            'tipo_atendimento' => null,
-            'tipo_atendimento_id' => null
+            'tipo_atendimento' => null
 
         ]);
 
@@ -190,7 +189,7 @@ class ChamadasController extends Controller
 
                 $chamadoNaoValidado = ChamadaNormalParametro::where('validacao', 'Não Validado')->where('data_ref', $diaHoje)->where('numero_inicial', $numero_ref)->get();
 
-                foreach ($chamadoNaoValidado as $chamado){
+                foreach ($chamadoNaoValidado as $chamado) {
                     $chamado->validacao = 'Ok';
                     $chamado->save();
                 }
@@ -206,7 +205,7 @@ class ChamadasController extends Controller
 
                 $chamadoNaoValidado = ChamadaPrioridadeParametro::where('validacao', 'Não Validado')->where('data_ref', $diaHoje)->where('numero_inicial', $numero_ref)->get();
 
-                foreach ($chamadoNaoValidado as $chamado){
+                foreach ($chamadoNaoValidado as $chamado) {
                     $chamado->validacao = 'Ok';
                     $chamado->save();
                 }
@@ -263,13 +262,11 @@ class ChamadasController extends Controller
     // finaliza uma chamada ativa
     public function finalizaAtiva(Request $request)
     {
+
         //$guiche = Guiche::where('ip', $request->ip())->first();
         $guiche = Guiche::find(1);
 
         // se o guiche for o dono da chamada, prossegue
-
-        // primeiro encontro o tipo de atendimento
-        $tipoAtendimento = TipoAtendimento::find($request->tipo_atendimento);
 
         // encontro o público alvo
         $publicoAlvo = PublicoAlvo::find($request->publico_alvo);
@@ -281,14 +278,38 @@ class ChamadasController extends Controller
         // atribuo o tipo de chamada e o publico alvo para finalizar
         //status OK
 
-        $chamada->tipo_atendimento_id = $tipoAtendimento->id;
-        $chamada->tipo_atendimento = $tipoAtendimento->tipo;
+        $lista_de_tipos = '';
+
+        // ajusto os tipos
+
+        for ($i = 0; $i < count($request->tipo_atendimento); $i++) {
+
+            // primeiro encontro o tipo de atendimento
+            $tipoAtendimento = TipoAtendimento::find($request->tipo_atendimento[$i]);
+
+            if ($i === (count($request->tipo_atendimento) - 1)) {
+                $textfinal = '';
+            } else {
+                $textfinal = ', ';
+            }
+
+            $lista_de_tipos = $lista_de_tipos . $tipoAtendimento->tipo . $textfinal;
+
+            ChamadaTipoAtendimento::create([
+                'tipo_atendimento_id' => $tipoAtendimento->id,
+                'chamada_id' => $request->id_chamada
+            ]);
+
+        }
+
+        $chamada->tipo_atendimento = $lista_de_tipos;
+
         $chamada->publico_alvo_id = $publicoAlvo->id;
         $chamada->publico_alvo = $publicoAlvo->tipo;
         $chamada->status = 'Ok';
         $chamada->save();
 
-        return $chamada;
+        return $chamada->load('chamadaTipoAtendimento.tipoAtendimento');
     }
 
     // realiza uma rechamada
@@ -300,8 +321,25 @@ class ChamadasController extends Controller
         // se o guiche for o dono da chamada, prossegue
 
         $chamada = Chamada::find($id);
+
         $chamada->rechamada = 1;
+        $chamada->status = 'Descartado por Rechamada';
         $chamada->save();
-        return $chamada;
+
+        $novaRechamada = Chamada::create([
+            'panel_id' =>$chamada->panel_id,
+            'tipo' =>$chamada->tipo,
+            'tipo_atendimento' =>$chamada->tipo_atendimento,
+            'publico_alvo' =>$chamada->publico_alvo,
+            'publico_alvo_id' =>$chamada->publico_alvo_id,
+            'guiche_id' =>$chamada->guiche_id,
+            'numero_ref' =>$chamada->numero_ref,
+            'nome_ref' =>$chamada->nome_ref,
+            'chamador' =>$chamada->chamador,
+            'rechamada' =>0,
+            'status'=> 'Aguardando'
+        ]);
+
+        return [$novaRechamada,$chamada];
     }
 }
