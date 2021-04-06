@@ -20,7 +20,7 @@ class ChamadaNormalParametrosController extends BaseController
         $guiche = Guiche::where('ip', $ipAddressGuiche)->first();
 
         // o id do painel de referencia é $guiche->panel->id
-        $idPanel = 1;
+        $idPanel = $guiche->panel_id;
 
         return ChamadaNormalParametro::where('panel_id',$idPanel)->orderBy('id','DESC')->paginate($request->per_page);
 
@@ -37,7 +37,7 @@ class ChamadaNormalParametrosController extends BaseController
         $guiche = Guiche::where('ip', $ipAddressGuiche)->first();
 
         // o id do painel de referencia é $guiche->panel->id
-        $idPanel = 1;
+        $idPanel = $guiche->panel_id;
 
         return response()
             ->json(ChamadaNormalParametro::create([
@@ -60,7 +60,7 @@ class ChamadaNormalParametrosController extends BaseController
         $guiche = Guiche::where('ip', $ipAddressGuiche)->first();
 
         // o id do painel de referencia é $guiche->panel->id
-        $idPanel = 1;
+        $idPanel = $guiche->panel_id;
 
         return ChamadaNormalParametro::where('panel_id',$idPanel)->orderBy('id','DESC')->first();
 

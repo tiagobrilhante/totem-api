@@ -18,27 +18,24 @@ class ChamadasController extends Controller
     public function myCallsNormal(Request $request)
     {
         // a referencia de chamadas é o guiche
-        //$guiche = Guiche::where('ip', $request->ip())->first();
-        $guiche = Guiche::find(1);
+        $guiche = Guiche::where('ip', $request->ip())->first();
 
         return Chamada::where('tipo', 'Normal')->where('guiche_id', $guiche->id)->get()->load('chamadaTipoAtendimento.tipoAtendimento');
     }
 
-    public function myCallsPreferencial()
+    public function myCallsPreferencial(Request $request)
     {
         // a referencia de chamadas é o guiche
-        //$guiche = Guiche::where('ip', $request->ip())->first();
-        $guiche = Guiche::find(1);
+        $guiche = Guiche::where('ip', $request->ip())->first();
 
         return Chamada::where('tipo', 'Preferencial')->where('guiche_id', $guiche->id)->get()->load('chamadaTipoAtendimento.tipoAtendimento');
 
     }
 
-    public function myCallsNominal()
+    public function myCallsNominal(Request $request)
     {
         // a referencia de chamadas é o guiche
-        //$guiche = Guiche::where('ip', $request->ip())->first();
-        $guiche = Guiche::find(1);
+        $guiche = Guiche::where('ip', $request->ip())->first();
 
         return Chamada::where('tipo', 'Nominal')->where('guiche_id', $guiche->id)->get()->load('chamadaTipoAtendimento.tipoAtendimento');
 
@@ -59,8 +56,7 @@ class ChamadasController extends Controller
         $diaHoje = date('Y-m-d ');
 
         // tem que ver qual é o painel de referencia
-        //$guiche = Guiche::where('ip', $request->ip())->first();
-        $guiche = Guiche::find(1);
+        $guiche = Guiche::where('ip', $request->ip())->first();
         $panel = $guiche->panel;
 
 
@@ -156,12 +152,15 @@ class ChamadasController extends Controller
         if ($request->tipo === 'Normal') {
             $numero_ref = $previsao[0];
             $nome_ref = null;
+            $cor_ref = 'blue';
         } elseif ($request->tipo === 'Preferencial') {
             $numero_ref = $previsao[1];
             $nome_ref = null;
+            $cor_ref = 'red';
         } else {
             $numero_ref = null;
             $nome_ref = $request->nome_ref;
+            $cor_ref = 'orange';
         }
 
         $chamada = Chamada::create([
@@ -171,6 +170,7 @@ class ChamadasController extends Controller
             'nome_ref' => $nome_ref,
             'panel_id' => $request->guiche['panel_id'],
             'status' => 'Aguardando',
+            'cor'=>$cor_ref,
             'chamador' => $usuario,
             'rechamada' => false,
             'tipo_atendimento' => null
@@ -228,8 +228,7 @@ class ChamadasController extends Controller
     {
 
         $ipAddress = $request->ip();
-        //$guiche = Guiche::where('ip', $ipAddress)->first();
-        $guiche = Guiche::find(1)->load('panel.om');
+        $guiche = Guiche::where('ip', $ipAddress)->first()->load('panel.om');
         $chamada_aberta = Chamada::where('guiche_id', $guiche->id)->where('status', 'Aguardando')->count();
 
         //return $chamada_aberta;
@@ -245,11 +244,10 @@ class ChamadasController extends Controller
     }
 
     // descarta uma chamda ativa
-    public function descartaAtiva($id)
+    public function descartaAtiva(Request $request, $id)
     {
 
-        //$guiche = Guiche::where('ip', $request->ip())->first();
-        $guiche = Guiche::find(1);
+        $guiche = Guiche::where('ip', $request->ip())->first();
 
         // se o guiche for o dono da chamada, prossegue
 
@@ -263,8 +261,7 @@ class ChamadasController extends Controller
     public function finalizaAtiva(Request $request)
     {
 
-        //$guiche = Guiche::where('ip', $request->ip())->first();
-        $guiche = Guiche::find(1);
+        $guiche = Guiche::where('ip', $request->ip())->first();
 
         // se o guiche for o dono da chamada, prossegue
 
@@ -313,10 +310,9 @@ class ChamadasController extends Controller
     }
 
     // realiza uma rechamada
-    public function rechamadaAtiva($id)
+    public function rechamadaAtiva(Request $request, $id)
     {
-        //$guiche = Guiche::where('ip', $request->ip())->first();
-        $guiche = Guiche::find(1);
+        $guiche = Guiche::where('ip', $request->ip())->first();
 
         // se o guiche for o dono da chamada, prossegue
 
@@ -334,6 +330,7 @@ class ChamadasController extends Controller
             'publico_alvo_id' =>$chamada->publico_alvo_id,
             'guiche_id' =>$chamada->guiche_id,
             'numero_ref' =>$chamada->numero_ref,
+            'cor' =>$chamada->cor,
             'nome_ref' =>$chamada->nome_ref,
             'chamador' =>$chamada->chamador,
             'rechamada' =>0,

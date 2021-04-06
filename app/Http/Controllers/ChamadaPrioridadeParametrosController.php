@@ -19,7 +19,7 @@ class ChamadaPrioridadeParametrosController extends BaseController
         $guiche = Guiche::where('ip', $ipAddressGuiche)->first();
 
         // o id do painel de referencia é $guiche->panel->id
-        $idPanel = 1;
+        $idPanel = $guiche->panel_id;
 
         return ChamadaPrioridadeParametro::where('panel_id',$idPanel)->orderBy('id','DESC')->paginate($request->per_page);
 
@@ -36,7 +36,7 @@ class ChamadaPrioridadeParametrosController extends BaseController
         $guiche = Guiche::where('ip', $ipAddressGuiche)->first();
 
         // o id do painel de referencia é $guiche->panel->id
-        $idPanel = 1;
+        $idPanel = $guiche->panel_id;
 
         return response()
             ->json(ChamadaPrioridadeParametro::create([
@@ -59,7 +59,7 @@ class ChamadaPrioridadeParametrosController extends BaseController
         $guiche = Guiche::where('ip', $ipAddressGuiche)->first();
 
         // o id do painel de referencia é $guiche->panel->id
-        $idPanel = 1;
+        $idPanel = $guiche->panel_id;
 
         return ChamadaPrioridadeParametro::where('panel_id',$idPanel)->orderBy('id','DESC')->first();
 

@@ -17,6 +17,7 @@ class Chamada extends Model
         'numero_ref',
         'nome_ref',
         'chamador',
+        'cor',
         'rechamada',
         'status'
     ];

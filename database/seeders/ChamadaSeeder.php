@@ -28,6 +28,7 @@ class ChamadaSeeder extends Seeder
                 'nome_ref'=> null,
                 'panel_id' => 1,
                 'status'=>'OK',
+                'cor'=>'blue',
                 'chamador'=>'Cel Outro',
                 'rechamada'=>false,
                 'created_at'=> '2021-02-01 12:00:00'
@@ -42,6 +43,7 @@ class ChamadaSeeder extends Seeder
                 'publico_alvo_id'=>1,
                 'guiche_id'=>1,
                 'numero_ref'=>9,
+                'cor'=>'blue',
                 'nome_ref'=> null,
                 'panel_id' => 1,
                 'status'=>'OK',
@@ -60,6 +62,7 @@ class ChamadaSeeder extends Seeder
                 'numero_ref'=>6,
                 'nome_ref'=> null,
                 'panel_id' => 1,
+                'cor'=>'red',
                 'status'=>'OK',
                 'chamador'=>'Cel Outro',
                 'rechamada'=>false,

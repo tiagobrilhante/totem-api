@@ -32,6 +32,19 @@ $router->group(['prefix' => '/api/painelchamada'], function () use ($router) {
 
 });
 
+$router->group(['prefix' => '/api/mensagens'], function () use ($router) {
+
+    $router->post('', 'MensagemController@store');
+    $router->get('', 'MensagemController@index');
+    $router->get('painel', 'MensagemController@mensagemPainel');
+    $router->get('{id}', 'MensagemController@show');
+    $router->put('{id}', 'MensagemController@update');
+    $router->delete('{id}', 'MensagemController@destroy');
+
+});
+
+
+
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {
 
     $router->group(['prefix' => 'om'], function () use ($router) {

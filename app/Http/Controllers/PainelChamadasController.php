@@ -29,8 +29,7 @@ class PainelChamadasController extends Controller
         $diaHoje = date('Y-m-d ');
 
         // tem que ver qual é o painel de referencia
-        //$panel = Panel::where('ip', $request->ip())->first();
-        $panel = Panel::find(1);
+        $panel = Panel::where('ip', $request->ip())->first();
 
 
         $chamadasPainel='';
@@ -62,8 +61,7 @@ class PainelChamadasController extends Controller
     public function painelAtivo(Request $request)
     {
         $ipAddress = $request->ip();
-        //return Guiche::where('ip', $ipAddress)->first();
-        return Panel::find(1)->load('om');
+        return Panel::where('ip', $ipAddress)->first()->load('om');
 
     }
 

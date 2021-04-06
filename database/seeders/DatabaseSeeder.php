@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
              TipoAtendimentoSeeder::class,
              PublicoAlvoSeeder::class,
              ChamadaSeeder::class,
-             TipoAtendimentoChamadaSeeder::class
+             TipoAtendimentoChamadaSeeder::class,
+             MensagemSeeder::class
          ]);
     }
 }

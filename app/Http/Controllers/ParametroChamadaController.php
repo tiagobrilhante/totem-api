@@ -22,7 +22,7 @@ class ParametroChamadaController extends Controller
         $guiche = Guiche::where('ip', $ipAddressGuiche)->first();
 
         // o id do painel de referencia é $guiche->panel->id
-        $idPanel = 1;
+        $idPanel = $guiche->panel_id;
 
         $dataHoje = date('Y-m-d');
 

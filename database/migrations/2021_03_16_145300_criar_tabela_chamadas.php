@@ -22,6 +22,7 @@ class CriarTabelaChamadas extends Migration
             $table->bigInteger('numero_ref')->nullable();
             $table->string('nome_ref')->nullable();
             $table->string('status');
+            $table->string('cor');
             $table->string('chamador');
             $table->boolean('rechamada');
 

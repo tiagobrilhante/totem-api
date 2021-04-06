@@ -2,32 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Guiche;
-use App\Models\Om;
+use App\Models\Mensagem;
+use App\Models\Panel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class GuicheController extends Controller
+class MensagemController extends BaseController
 {
-
     public function index(Request $request)
     {
-        return Guiche::paginate($request->per_page);
+
+        return Mensagem::where('om_id',Auth::user()->om_id)->paginate($request->per_page);
+
+    }
+
+    public function mensagemPainel(Request $request)
+    {
+
+        $painel_ip = $request->ip();
+        $painel = Panel::where('ip', $painel_ip)->first();
+
+
+        return Mensagem::where('om_id',$painel->om_id)->paginate($request->per_page);
 
     }
 
     public function store(Request $request)
     {
 
+        $mensagem = Mensagem::create([
+            'mensagem'=>$request['mensagem'],
+            'responsavel'=>Auth::user()->posto_grad . ' ' . Auth::user()->nome_guerra,
+            'om_id'=>Auth::user()->om_id
+        ]);
+
         return response()
-            ->json(Guiche::create($request->all())->load('panel.om'),  201);
+            ->json($mensagem,  201);
 
     }
 
     public function show($id)
     {
 
-        $recurso = Guiche::find($id);
+        $recurso = Mensagem::find($id);
 
         if (is_null($recurso)) {
 
@@ -42,8 +59,7 @@ class GuicheController extends Controller
     public function update(int $id, Request $request)
     {
 
-        $recurso = Guiche::find($id);
-
+        $recurso = Mensagem::find($id);
 
         if (is_null($recurso)) {
 
@@ -52,6 +68,8 @@ class GuicheController extends Controller
             ], 404);
 
         }
+
+        $request['responsavel'] = Auth::user()->posto_grad . ' ' . Auth::user()->nome_guerra;
 
         $recurso->fill($request->all());
         $recurso->save();
@@ -63,7 +81,7 @@ class GuicheController extends Controller
     public function destroy($id)
     {
 
-        $recurso = Guiche::destroy($id);
+        $recurso = Mensagem::destroy($id);
 
         if ($recurso === 0) {
 
@@ -77,18 +95,4 @@ class GuicheController extends Controller
 
     }
 
-
-    public function indexLoad(Request $request)
-    {
-        return Guiche::paginate($request->per_page)->load('panel.om');
-
-    }
-
-    public function myGuiche(Request $request)
-    {
-        $ipAddress = $request->ip();
-
-        return Guiche::where('ip', $ipAddress)->first()->load('panel.om');
-
-    }
 }
