@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CriarTabelaUsers extends Migration
+class AddBgFieldsToTotemConfigsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,9 @@ class CriarTabelaUsers extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('email')->unique();
-            $table->string('nome');
-            $table->string('password');
-
-            $table->timestamps();
-            $table->softDeletes();
-
+        Schema::table('totem_configs', function (Blueprint $table) {
+            $table->string('bg_img')->nullable();
+            $table->string('bg_color')->nullable();
         });
     }
 
@@ -32,6 +26,8 @@ class CriarTabelaUsers extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::table('totem_configs', function (Blueprint $table) {
+            //
+        });
     }
 }

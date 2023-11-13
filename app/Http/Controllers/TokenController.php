@@ -3,11 +3,9 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\User;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class TokenController extends Controller
@@ -16,21 +14,32 @@ class TokenController extends Controller
     public function gerarToken(Request $request)
     {
 
+        // valida os dados
         $this->validate($request,[
-            'cpf'=> 'required',
+            'email'=> 'required',
             'password'=>'required'
-
         ]);
 
-        $user = User::where('cpf', $request['cpf'])->first();
+        $user = User::where('email', $request['email'])->first();
 
+        // caso senha errada
         if (is_null($user) || !Hash::check($request->password, $user->password)) {
 
-            return response()->json('Usuário ou senha inválidos', 401);
+           return response()->json('Usuário ou senha inválidos', 401);
 
         }
 
-       $token =  JWT::encode(['cpf' => $user->cpf], env('JWT_KEY'));
+        // payload
+        $payload = [
+            'iss' => "lumen-jwt", // Issuer of the token
+            'email' => $user->email, // Subject of the token
+            'iat' => time(), // Time when JWT was issued.
+            //'exp' => time() + 60 * 60 * 60 * 24 // Expiration time
+            'exp' => time() + 43200 // Expiration time (12 horas)
+
+        ];
+
+       $token =  JWT::encode($payload, env('JWT_KEY'));
 
         return [
             'access_token'=>$token,

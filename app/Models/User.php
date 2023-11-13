@@ -7,15 +7,16 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Lumen\Auth\Authorizable;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
-    use Authenticatable, Authorizable, HasFactory;
+    use Authenticatable, Authorizable, HasFactory, SoftDeletes;
+
+    use SoftDeletes;
 
     protected $table = 'users';
-    protected $appends = ['om','guerra'];
-
 
     /**
      * The attributes that are mass assignable.
@@ -23,14 +24,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
-        'cpf',
+        'email',
         'nome',
-        'nome_guerra',
-        'posto_grad',
-        'om_id',
-        'tipo',
         'password',
-        'reset'
     ];
 
     /**
@@ -43,25 +39,5 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
 
 
-    public function getOmAttribute()
-    {
-        return
-
-           Om::where('id', $this->om_id)->first();
-
-    }
-
-    public function getGuerraAttribute()
-    {
-        $user_posto_grad = $this->posto_grad;
-        $user_nome_guerra = $this->nome_guerra;
-        return
-
-            $user_posto_grad.' '.$user_nome_guerra;
-
-    }
-
-
-
-
 }
+

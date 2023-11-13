@@ -44,7 +44,6 @@ abstract  class BaseController
 
         $recurso = $this->classe::find($id);
 
-
         if (is_null($recurso)) {
 
             return response()->json([

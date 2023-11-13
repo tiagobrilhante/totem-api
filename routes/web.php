@@ -19,141 +19,81 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-
 $router->post('/api/login', 'TokenController@gerarToken');
 
-
-$router->post('/api/myip', 'IpController@myIp');
-
-$router->group(['prefix' => '/api/painelchamada'], function () use ($router) {
-
-    $router->get('', 'PainelChamadasController@chamadasPainel');
-    $router->get('panel', 'PainelChamadasController@painelAtivo');
-
-});
-
-$router->group(['prefix' => '/api/mensagens'], function () use ($router) {
-
-    $router->post('', 'MensagemController@store');
-    $router->get('', 'MensagemController@index');
-    $router->get('painel', 'MensagemController@mensagemPainel');
-    $router->get('{id}', 'MensagemController@show');
-    $router->put('{id}', 'MensagemController@update');
-    $router->delete('{id}', 'MensagemController@destroy');
-
-});
+$router->post('/api/totemconfig/admarea', 'TotemConfigController@acesso');
+$router->get('/api/totemconfig', 'TotemConfigController@index');
+$router->get('/api/assunto/principal', 'AssuntoController@totemPcp');
+$router->get('/api/evento/principal', 'EventoController@totemPcp');
+$router->get('/api/evento/principal/porpag/{pag}', 'EventoController@pegaPorPag');
+// $router->get('/api/evento/principal/porpag/{pag}', 'EventoController@pegaPorPag');
 
 
-
+// autenticado ...
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {
 
-    $router->group(['prefix' => 'om'], function () use ($router) {
-
-        $router->post('', 'OmController@store');
-        $router->get('', 'OmController@index');
-        $router->get('disponivel', 'OmController@omsDisponives');
-        $router->get('{id}', 'OmController@show');
-        $router->put('{id}', 'OmController@update');
-        $router->delete('{id}', 'OmController@destroy');
-
-    });
-
-    $router->group(['prefix' => 'panels'], function () use ($router) {
-
-        $router->post('', 'PanelController@store');
-        $router->get('', 'PanelController@index');
-        $router->get('load', 'PanelController@indexLoad');
-        $router->get('showpanel', 'PanelController@showPanel');
-        $router->get('{id}', 'PanelController@show');
-        $router->put('{id}', 'PanelController@update');
-        $router->delete('{id}', 'PanelController@destroy');
-
-    });
-
-    $router->group(['prefix' => 'tipoatendimento'], function () use ($router) {
-
-        $router->get('alltipos', 'TipoAtendimentoController@tiposOm');
-        $router->post('', 'TipoAtendimentoController@store');
-        $router->get('', 'TipoAtendimentoController@index');
-        $router->get('{id}', 'TipoAtendimentoController@show');
-        $router->put('{id}', 'TipoAtendimentoController@update');
-        $router->delete('{id}', 'TipoAtendimentoController@destroy');
-
-    });
-
-    $router->group(['prefix' => 'publicoalvo'], function () use ($router) {
-
-        $router->get('alltipos', 'PublicoAlvoController@tiposOm');
-        $router->post('', 'PublicoAlvoController@store');
-        $router->get('', 'PublicoAlvoController@index');
-        $router->get('{id}', 'PublicoAlvoController@show');
-        $router->put('{id}', 'PublicoAlvoController@update');
-        $router->delete('{id}', 'PublicoAlvoController@destroy');
-
-    });
-
-    $router->group(['prefix' => 'parametronormal'], function () use ($router) {
-
-        $router->post('', 'ChamadaNormalParametrosController@store');
-        $router->get('', 'ChamadaNormalParametrosController@index');
-        $router->get('last', 'ChamadaNormalParametrosController@last');
-
-    });
-    $router->group(['prefix' => 'parametroprioridade'], function () use ($router) {
-
-        $router->post('', 'ChamadaPrioridadeParametrosController@store');
-        $router->get('', 'ChamadaPrioridadeParametrosController@index');
-        $router->get('last', 'ChamadaPrioridadeParametrosController@last');
-
-
-    });
-    $router->group(['prefix' => 'parametrochamada'], function () use ($router) {
-
-        $router->get('checa', 'ParametroChamadaController@verificaParametros');
-
-    });
-
-    $router->group(['prefix' => 'chamadas'], function () use ($router) {
-
-        $router->get('mycalls/normal', 'ChamadasController@myCallsNormal');
-        $router->get('mycalls/preferencial', 'ChamadasController@myCallsPreferencial');
-        $router->get('mycalls/nominal', 'ChamadasController@myCallsNominal');
-        $router->get('previsao', 'ChamadasController@previsaoChamada');
-        $router->post('chama', 'ChamadasController@geraChamada');
-        $router->get('aberto', 'ChamadasController@checaAberto');
-        $router->get('descarta/{id}', 'ChamadasController@descartaAtiva');
-        $router->post('finaliza', 'ChamadasController@finalizaAtiva');
-        $router->get('rechamada/{id}', 'ChamadasController@rechamadaAtiva');
-
-    });
-
-    $router->group(['prefix' => 'guiches'], function () use ($router) {
-
-        $router->post('', 'GuicheController@store');
-        $router->get('load', 'GuicheController@indexLoad');
-        $router->get('', 'GuicheController@index');
-        $router->get('myguiche', 'GuicheController@myGuiche');
-        $router->get('{id}', 'GuicheController@show');
-        $router->put('{id}', 'GuicheController@update');
-        $router->delete('{id}', 'GuicheController@destroy');
-
-    });
-
+    // USUARIOS
     $router->group(['prefix' => 'users'], function () use ($router) {
 
-        $router->post('', 'UserController@store');
-        $router->post('create', 'UserController@createUser');
+        $router->get('/problemas', 'UserController@verificaProblemas');
+        $router->get('', 'UserController@index');
+        $router->post('', 'UserController@createUser');
         $router->post('/password/reset', 'UserController@alteraSenhaResetada');
         $router->post('/password/change', 'UserController@alteraSenhaNormal');
         $router->post('/reset/password', 'UserController@resetaSenha');
-        $router->get('', 'UserController@index');
-        $router->get('{id}', 'UserController@show');
+        $router->post('email/', 'UserController@emailExist');
         $router->put('{id}', 'UserController@update');
         $router->delete('{id}', 'UserController@destroy');
-        $router->post('cpf/', 'UserController@cpfExist');
-        $router->post('tiposdisponiveis', 'UserController@retornaTipo');
 
 
+    });
+
+    // Totem Configs
+    $router->group(['prefix' => 'totemconfig'], function () use ($router) {
+        $router->get('/plus', 'TotemConfigController@plus');
+        $router->get('/removebg', 'TotemConfigController@removeBg');
+        $router->post('', 'TotemConfigController@store');
+        $router->post('/updatebg', 'TotemConfigController@updateBg');
+
+    });
+
+    // Assunto
+    $router->group(['prefix' => 'assunto'], function () use ($router) {
+        $router->get('', 'AssuntoController@index');
+        $router->post('', 'AssuntoController@store');
+        $router->delete('{id}', 'AssuntoController@destroy');
+        $router->put('{id}', 'AssuntoController@update');
+    });
+
+    // Imagem
+    $router->group(['prefix' => 'img'], function () use ($router) {
+
+        $router->get('', 'ImagemController@index');
+        $router->delete('{id}', 'ImagemController@destroy');
+        $router->post('', 'ImagemController@store');
+        $router->post('/update', 'ImagemController@update');
+        $router->get('/assunto/{id}', 'ImagemController@getImagemAssunto');
+    });
+
+    // eventos
+    $router->group(['prefix' => 'eventos'], function () use ($router) {
+        $router->get('', 'EventoController@index');
+        $router->post('', 'EventoController@store');
+        $router->post('/update', 'EventoController@update');
+        $router->post('/removeimagem', 'EventoController@removeImagem');
+        $router->post('/adicionaimgadicional', 'EventoController@addimgadicional');
+        $router->delete('{id}', 'EventoController@destroy');
+        $router->delete('/deletaimgadicional/{id}', 'EventoController@deletaimgadicional');
+    });
+
+    // home
+    $router->group(['prefix' => 'home'], function () use ($router) {
+        $router->get('', 'HomeController@getInitialStatistics');
+    });
+
+    // historico
+    $router->group(['prefix' => 'historico'], function () use ($router) {
+        $router->get('', 'HistoricoController@index');
     });
 
 });

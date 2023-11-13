@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CriarTabelaUsers extends Migration
+class CriarTabelaAssuntos extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CriarTabelaUsers extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('assuntos', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->unique();
-            $table->string('nome');
-            $table->string('password');
-
+            $table->string('nome_assunto');
+            $table->integer('ordem_exibicao');
             $table->timestamps();
             $table->softDeletes();
 
@@ -32,6 +30,6 @@ class CriarTabelaUsers extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('assuntos');
     }
 }
