@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 abstract  class BaseController
 {
 
+    //teste
     protected $classe;
 
     public function index(Request $request)
