@@ -26,8 +26,6 @@ $router->get('/api/totemconfig', 'TotemConfigController@index');
 $router->get('/api/assunto/principal', 'AssuntoController@totemPcp');
 $router->get('/api/evento/principal', 'EventoController@totemPcp');
 $router->get('/api/evento/principal/porpag/{pag}', 'EventoController@pegaPorPag');
-// $router->get('/api/evento/principal/porpag/{pag}', 'EventoController@pegaPorPag');
-
 
 // autenticado ...
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {
