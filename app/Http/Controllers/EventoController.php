@@ -128,12 +128,16 @@ class EventoController extends Controller
         $fonteImagemOriginalAntiga = $evento->fonteimagempcp;
 
         $requestDia = $request['dia'];
-        if ($requestDia == "null") {
+        if ($requestDia == "null" || $requestDia == '') {
             $requestDia = null;
+        } else {
+            $requestDia = (int)$requestDia;
         }
         $requestMes = $request['mes'];
-        if ($requestMes == "null") {
+        if ($requestMes == "null" || $requestMes == '') {
             $requestMes = null;
+        } else {
+            $requestMes = (int)$requestMes;
         }
         $requestAno = $request['ano'];
         $requestAno = (int)$requestAno;
@@ -272,6 +276,7 @@ class EventoController extends Controller
     public function removeImagem(Request $request)
     {
         $evento = Evento::find($request['id']);
+
         if ($evento->imagem !== null) {
             unlink($evento->imagem);
         }
@@ -365,9 +370,9 @@ class EventoController extends Controller
 
         $montagemRetorno = [];
 
-        for ($j = 0; $j < count($arrayDeArrays[$pag - 1]); $j++) {
+        foreach ($arrayDeArrays[$pag - 1] as $j => $jValue) {
 
-            $imagem = $this->retornaBanner($arrayDeArrays[$pag - 1][$j]);
+            $imagem = $this->retornaBanner($jValue);
 
             $juca = ['ano' => $arrayDeArrays[$pag - 1][$j], 'eventos' => Evento::where('ano', $arrayDeArrays[$pag - 1][$j])->get()->load('imagensAdicionais'), 'imagem' => $imagem];
             $montagemRetorno[] = $juca;

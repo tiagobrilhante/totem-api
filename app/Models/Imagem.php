@@ -15,7 +15,6 @@ class Imagem extends Model
 
     public function assunto()
     {
-
         return $this->belongsTo(Assunto::class);
 
     }

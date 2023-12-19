@@ -29,6 +29,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password',
     ];
 
+    protected $appends = ['firstName'];
+
     /**
      * The attributes excluded from the model's JSON form.
      *
@@ -37,6 +39,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
     ];
+
+
+    public function getFirstNameAttribute()
+    {
+        return
+            explode(" ", $this->nome)[0];
+    }
 
 
 }
