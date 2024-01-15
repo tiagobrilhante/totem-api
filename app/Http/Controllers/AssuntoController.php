@@ -147,12 +147,6 @@ class AssuntoController extends Controller
             $assunto->ordem_exibicao = $novaOrdem;
             $assunto->save();
 
-
-
-
-
-
-
             return $assunto;
         }
 
@@ -168,4 +162,12 @@ class AssuntoController extends Controller
         return response()->json($assuntosPaginados);
     }
 
+    public function incrementaAcesso(Request $request)
+    {
+       $assunto = Assunto::find($request['id']);
+       $assunto->acessos++;
+       $assunto->save();
+
+       return $assunto;
+    }
 }

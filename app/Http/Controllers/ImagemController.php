@@ -395,4 +395,13 @@ class ImagemController extends Controller
 
     }
 
+    public function incrementaAcesso(Request $request)
+    {
+        $imagem = Imagem::find($request['id']);
+        $imagem->acessos++;
+        $imagem->save();
+
+        return $imagem;
+    }
+
 }

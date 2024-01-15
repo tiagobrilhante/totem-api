@@ -16,7 +16,7 @@
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return '<h1>API EBTotem</h1> <b>Framework da Api:</b> ' . $router->app->version() . '<br> <b>Versão da api:</b> 1.1<br><b>Desenvolvedor: </b> TC Brilhante <br>Todos os Direitos dessa API pertencem ao Exército Brasileiro. <br> Todo o poder emana do código.';
 });
 
 $router->post('/api/login', 'TokenController@gerarToken');
@@ -26,6 +26,9 @@ $router->get('/api/totemconfig', 'TotemConfigController@index');
 $router->get('/api/assunto/principal', 'AssuntoController@totemPcp');
 $router->get('/api/evento/principal', 'EventoController@totemPcp');
 $router->get('/api/evento/principal/porpag/{pag}', 'EventoController@pegaPorPag');
+$router->post('/api/incrementaacessoassunto', 'AssuntoController@incrementaAcesso');
+$router->post('/api/incrementaacessoimagem', 'ImagemController@incrementaAcesso');
+$router->post('/api/incrementaacessoevento', 'EventoController@incrementaAcesso');
 
 // autenticado ...
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {
@@ -92,6 +95,11 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     // historico
     $router->group(['prefix' => 'historico'], function () use ($router) {
         $router->get('', 'HistoricoController@index');
+    });
+
+    // Estatisticas
+    $router->group(['prefix' => 'estatisticas'], function () use ($router) {
+        $router->get('{tipo}', 'EstatisticaController@getEstatisticas');
     });
 
 });

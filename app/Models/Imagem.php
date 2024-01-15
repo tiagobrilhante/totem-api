@@ -10,7 +10,7 @@ class Imagem extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['ordem', 'nome', 'imagem', 'legenda', 'saibamais', 'banner', 'assunto_id', 'fonte'];
+    protected $fillable = ['ordem', 'nome', 'imagem', 'legenda', 'saibamais', 'banner', 'assunto_id', 'fonte', 'acessos'];
 
 
     public function assunto()

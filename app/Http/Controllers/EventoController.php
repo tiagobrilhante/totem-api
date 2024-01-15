@@ -463,4 +463,13 @@ class EventoController extends Controller
         }
 
     }
+
+    public function incrementaAcesso(Request $request)
+    {
+        $evento = Evento::find($request['id']);
+        $evento->acessos++;
+        $evento->save();
+
+        return $evento;
+    }
 }
