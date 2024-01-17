@@ -102,4 +102,10 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
         $router->get('{tipo}', 'EstatisticaController@getEstatisticas');
     });
 
+    // bkupbanco
+    $router->group(['prefix' => 'bkupbanco'], function () use ($router) {
+        $router->get('', 'DatabaseController@getAll');
+        $router->get('/gerabkupnovo', 'DatabaseController@geraBkupBancoNovo');
+    });
+
 });
