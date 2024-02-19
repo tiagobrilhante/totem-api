@@ -16,7 +16,7 @@
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 $router->get('/', function () use ($router) {
-    return '<h1>API EBTotem</h1> <b>Framework da Api:</b> ' . $router->app->version() . '<br> <b>Versão da api:</b> 1.1<br><b>Desenvolvedor: </b> TC Brilhante <br>Todos os Direitos dessa API pertencem ao Exército Brasileiro. <br> Todo o poder emana do código.';
+    return '<h1>API EBTotem</h1> <b>Framework da Api:</b> ' . $router->app->version() . '<br> <b>Versão da api:</b> 1.2<br><b>Desenvolvedor: </b> TC Brilhante <br>Todos os Direitos dessa API pertencem ao Exército Brasileiro. <br> Todo o poder emana do código.';
 });
 
 $router->post('/api/login', 'TokenController@gerarToken');
@@ -26,6 +26,9 @@ $router->get('/api/totemconfig', 'TotemConfigController@index');
 $router->get('/api/assunto/principal', 'AssuntoController@totemPcp');
 $router->get('/api/evento/principal', 'EventoController@totemPcp');
 $router->get('/api/evento/principal/porpag/{pag}', 'EventoController@pegaPorPag');
+$router->get('/api/admquiz/pegaquiz', 'QuizController@pegaQuiz');
+$router->get('/api/admquiz/pegaquizpcp/{id}', 'QuizController@pegaQuizCompleto');
+$router->post('/api/admquiz/enviarespostas/{id}', 'QuizController@confereRespostas');
 $router->post('/api/incrementaacessoassunto', 'AssuntoController@incrementaAcesso');
 $router->post('/api/incrementaacessoimagem', 'ImagemController@incrementaAcesso');
 $router->post('/api/incrementaacessoevento', 'EventoController@incrementaAcesso');
@@ -106,6 +109,21 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->group(['prefix' => 'bkupbanco'], function () use ($router) {
         $router->get('', 'DatabaseController@getAll');
         $router->get('/gerabkupnovo', 'DatabaseController@geraBkupBancoNovo');
+    });
+
+    // admQuiz
+    $router->group(['prefix' => 'admquiz'], function () use ($router) {
+        $router->get('', 'QuizController@index');
+        $router->get('{id}', 'QuizController@get');
+        $router->post('', 'QuizController@store');
+        $router->put('{id}', 'QuizController@update');
+        $router->patch('/status', 'QuizController@ativaDesativa');
+        $router->delete('{id}', 'QuizController@destroy');
+    });
+
+    // estatisticaQuiz
+    $router->group(['prefix' => 'statsquiz'], function () use ($router) {
+        $router->get('{id}', 'QuizEstatisticaController@get');
     });
 
 });

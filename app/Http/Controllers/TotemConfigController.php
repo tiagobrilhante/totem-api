@@ -20,7 +20,8 @@ class TotemConfigController extends Controller
             'tipo_totem' => $config->tipo_totem,
             'largura_index' => $config->largura_index,
             'bg_img' => $config->bg_img,
-            'bg_color' => $config->bg_color
+            'bg_color' => $config->bg_color,
+            'quiz' =>$config->quiz
         ];
 
         return $filteredConfig;
@@ -45,6 +46,7 @@ class TotemConfigController extends Controller
         $totemConfig->tipo_totem = $request['tipo_totem'];
         $totemConfig->bg_img = $request['bg_img'];
         $totemConfig->bg_color = $request['bg_color'];
+        $totemConfig->quiz = $request['quiz'];
         $totemConfig->save();
 
         return $totemConfig;
