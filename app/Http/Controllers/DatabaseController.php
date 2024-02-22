@@ -43,7 +43,7 @@ class DatabaseController extends Controller
                 [ -d $publicPath/bg ] && cp -R $publicPath/bg $tempDir/;
                 ");
 
-        system("mysqldump -h $dbhost -u $dbuser -p$dbpass --lock-tables $dbname > $backupfile");
+        system("mysqldump -h $dbhost -u $dbuser -p'$dbpass' --lock-tables $dbname > $backupfile 2>backup_error.log");
 
         // Cria o arquivo tar.gz com o backup do banco e a pasta public (dentro do diretório temporário)
         system("tar -czvf $backupzip $backupfile $tempDir");
