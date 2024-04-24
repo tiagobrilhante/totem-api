@@ -11,7 +11,7 @@ class Evento extends Model
     use SoftDeletes;
     protected $perPage = 6;
 
-    protected $fillable = ['ano','mes','dia', 'nome', 'imagem', 'legenda', 'saibamais','fonteimagempcp', 'acessos'];
+    protected $fillable = ['ano','mes','dia', 'nome','nome_en','nome_es', 'imagem', 'legenda','legenda_en','legenda_es', 'saibamais', 'saibamais_en','saibamais_es','fonteimagempcp', 'acessos'];
 
 
     public function imagensAdicionais()

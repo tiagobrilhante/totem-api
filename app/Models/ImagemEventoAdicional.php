@@ -10,7 +10,7 @@ class ImagemEventoAdicional extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['imagem', 'descricao', 'fonte',  'evento_id'];
+    protected $fillable = ['imagem', 'descricao','descricao_en','descricao_es', 'fonte',  'evento_id'];
 
     public function evento()
     {

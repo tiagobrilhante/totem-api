@@ -42,6 +42,42 @@ class EventoController extends Controller
 
         }
 
+        $saibamais_en = $request['saibamais_en'];
+        if ($request['saibamais_en'] == '' || $request['saibamais_en'] == null || $request['saibamais_en'] == 'null') {
+            $saibamais_en = null;
+
+        }
+
+        $saibamais_es = $request['saibamais_es'];
+        if ($request['saibamais_es'] == '' || $request['saibamais_es'] == null || $request['saibamais_es'] == 'null') {
+            $saibamais_es = null;
+
+        }
+
+        $nome_en = $request['nome_en'];
+        if ($request['nome_en'] == '' || $request['nome_en'] == null || $request['nome_en'] == 'null') {
+            $nome_en = null;
+
+        }
+
+        $nome_es = $request['nome_es'];
+        if ($request['nome_es'] == '' || $request['nome_es'] == null || $request['nome_es'] == 'null') {
+            $nome_es = null;
+
+        }
+
+        $legenda_en = $request['legenda_en'];
+        if ($request['legenda_en'] == '' || $request['legenda_en'] == null || $request['legenda_en'] == 'null') {
+            $legenda_en = null;
+
+        }
+
+        $legenda_es = $request['legenda_es'];
+        if ($request['legenda_es'] == '' || $request['legenda_es'] == null || $request['legenda_es'] == 'null') {
+            $legenda_es = null;
+
+        }
+
         if ($eventoTeste === 0) {
             // upload file //
             $file = $request['imagem'];
@@ -50,7 +86,14 @@ class EventoController extends Controller
             $filenameBase = 'img_' . time();
             $file->move($destination_path, $filenameBase . '.' . $file_mime);
             $evento->imagem = $destination_path . $filenameBase . '.' . $file_mime;
-            $evento->fonteimagempcp = $request['fonteimagempcp'];
+
+            $le_fonte = $request['fonteimagempcp'];
+            if ($request['fonteimagempcp'] == '' || $request['fonteimagempcp'] == null || $request['fonteimagempcp'] == 'null') {
+                $le_fonte = null;
+
+            }
+
+            $evento->fonteimagempcp = $le_fonte;
         } else {
             $evento->imagem = null;
             $evento->fonteimagempcp = null;
@@ -70,8 +113,14 @@ class EventoController extends Controller
         $evento->mes = $mes;
         $evento->ano = $request['ano'];
         $evento->nome = $request['nome'];
+        $evento->nome_en = $nome_en;
+        $evento->nome_es = $nome_es;
         $evento->legenda = $request['legenda'];
+        $evento->legenda_en = $legenda_en;
+        $evento->legenda_es = $legenda_es;
         $evento->saibamais = $saibamais;
+        $evento->saibamais_en = $saibamais_en;
+        $evento->saibamais_es = $saibamais_es;
         $evento->save();
 
 
@@ -172,12 +221,25 @@ class EventoController extends Controller
         if ($evento->ano !== $requestAno) {
             $evento->ano = $requestAno;
         }
-        if ($evento->ano !== $request['nome']) {
+        if ($evento->nome !== $request['nome']) {
             $evento->nome = $request['nome'];
+        }
+        if ($evento->nome_en !== $request['nome_en']) {
+            $evento->nome_en = $request['nome_en'];
+        }
+        if ($evento->nome_es !== $request['nome_es']) {
+            $evento->nome_es = $request['nome_es'];
         }
         if ($evento->legenda !== $request['legenda']) {
             $evento->legenda = $request['legenda'];
         }
+        if ($evento->legenda_en !== $request['legenda_en']) {
+            $evento->legenda_en = $request['legenda_en'];
+        }
+        if ($evento->legenda_es !== $request['legenda_es']) {
+            $evento->legenda_es = $request['legenda_es'];
+        }
+
         $saibamais = $request['saibamais'];
         if ($evento->saibamais !== $request['saibamais']) {
 
@@ -187,6 +249,27 @@ class EventoController extends Controller
             }
             $evento->saibamais = $saibamais;
         }
+
+        $saibamais_en = $request['saibamais_en'];
+        if ($evento->saibamais_en !== $request['saibamais_en']) {
+
+            if ($request['saibamais_en'] == '' || $request['saibamais_en'] == null || $request['saibamais_en'] == 'null') {
+                $saibamais_en = null;
+
+            }
+            $evento->saibamais_en = $saibamais_en;
+        }
+
+        $saibamais_es = $request['saibamais_es'];
+        if ($evento->saibamais_es !== $request['saibamais_es']) {
+
+            if ($request['saibamais_es'] == '' || $request['saibamais_es'] == null || $request['saibamais_es'] == 'null') {
+                $saibamais_es = null;
+
+            }
+            $evento->saibamais_es = $saibamais_es;
+        }
+
         if ($evento->fonteimagempcp !== $request['fonteimagempcp']) {
 
             $fonteimagempcp = $request['fonteimagempcp'];
@@ -425,6 +508,24 @@ class EventoController extends Controller
         }
         $imagemAdicional = new ImagemEventoAdicional();
 
+        if($request['descricao'] === '' || $request['descricao'] === null || $request['descricao'] === 'null') {
+            $descricao = null;
+        } else{
+            $descricao = $request['descricao'];
+        }
+
+        if($request['descricao_en'] === '' || $request['descricao_en'] === null || $request['descricao_en'] === 'null') {
+            $descricao_en = null;
+        } else{
+            $descricao_en = $request['descricao_en'];
+        }
+
+        if($request['descricao_es'] === '' || $request['descricao_es'] === null || $request['descricao_es'] === 'null') {
+            $descricao_es = null;
+        } else{
+            $descricao_es = $request['descricao_es'];
+        }
+
         if ($eventoTeste === 0) {
             // upload file //
             $file = $request['imagem'];
@@ -434,7 +535,9 @@ class EventoController extends Controller
             $file->move($destination_path, $filenameBase . '.' . $file_mime);
             $imagemAdicional->imagem = $destination_path . $filenameBase . '.' . $file_mime;
             $imagemAdicional->fonte = $request['fonte'];
-            $imagemAdicional->descricao = $request['descricao'];
+            $imagemAdicional->descricao = $descricao;
+            $imagemAdicional->descricao_en = $descricao_en;
+            $imagemAdicional->descricao_es = $descricao_es;
             $imagemAdicional->evento_id = $request['evento_id'];
             $imagemAdicional->save();
             return response()

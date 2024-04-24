@@ -14,6 +14,9 @@ class TotemConfigController extends Controller
 
         $filteredConfig = [
             'nome_totem' => $config->nome_totem,
+            'nome_totem_en' => $config->nome_totem_en,
+            'nome_totem_es' => $config->nome_totem_es,
+            'selected_lang' => $config->selected_lang,
             'altura_detail' => $config->altura_detail,
             'largura_detail' => $config->largura_detail,
             'altura_index' => $config->altura_index,
@@ -38,6 +41,8 @@ class TotemConfigController extends Controller
 
         $totemConfig = TotemConfig::first();
         $totemConfig->nome_totem = $request['nome_totem'];
+        $totemConfig->nome_totem_en = $request['nome_totem_en'];
+        $totemConfig->nome_totem_es = $request['nome_totem_es'];
         $totemConfig->access_code = $request['access_code'];
         $totemConfig->altura_detail = $request['altura_detail'];
         $totemConfig->largura_detail = $request['largura_detail'];
@@ -104,6 +109,17 @@ class TotemConfigController extends Controller
         return response()->json([
             'mensagem' => 'BG alterado'
         ], 200);
+    }
+
+    public function selecionaLinguagem(Request $request)
+    {
+        $lang = $request['lang'];
+
+        $totemConfig = TotemConfig::first();
+        $totemConfig->selected_lang = $lang;
+        $totemConfig->save();
+
+        return $totemConfig;
     }
 
 }

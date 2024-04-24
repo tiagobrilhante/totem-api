@@ -87,13 +87,25 @@ class ImagemController extends Controller
             }
         }
 
+        if ($request['fonte'] === '' || $request['fonte'] === null || $request['fonte'] === "null") {
+            $fonte = null;
+        } else {
+            $fonte = $request['fonte'];
+        }
+
         // save file data into database //
         $imagem->imagem = $destination_path . $filenameBase . '.' . $file_mime;
         $imagem->nome = $request['nome'];
+        $imagem->nome_en = $request['nome_en'];
+        $imagem->nome_es = $request['nome_es'];
         $imagem->ordem = $ordemReal;
         $imagem->legenda = $request['legenda'];
+        $imagem->legenda_en = $request['legenda_en'];
+        $imagem->legenda_es = $request['legenda_es'];
         $imagem->saibamais = $request['saibamais'];
-        $imagem->fonte = $request['fonte'];
+        $imagem->saibamais_en = $request['saibamais_en'];
+        $imagem->saibamais_es = $request['saibamais_es'];
+        $imagem->fonte = $fonte;
         $imagem->banner = $eBanner;
         $imagem->assunto_id = $request['assunto_id'];
         $imagem->save();
@@ -256,13 +268,26 @@ class ImagemController extends Controller
                 $eBanner = 0;
             }
 
+            if ($request['fonte'] === '' || $request['fonte'] === null || $request['fonte'] === "null") {
+                $fonte = null;
+            } else {
+                $fonte = $request['fonte'];
+            }
+
+
             // se não estou mudando a imagem, mas o assunto muda
             $imagem->nome = $request['nome'];
+            $imagem->nome_en = $request['nome_en'];
+            $imagem->nome_es = $request['nome_es'];
             $imagem->ordem = $ordemReal;
 
             $imagem->legenda = $request['legenda'];
-            $imagem->fonte = $request['fonte'];
+            $imagem->legenda_en = $request['legenda_en'];
+            $imagem->legenda_es = $request['legenda_es'];
+            $imagem->fonte = $fonte;
             $imagem->saibamais = $request['saibamais'];
+            $imagem->saibamais_en = $request['saibamais_en'];
+            $imagem->saibamais_es = $request['saibamais_es'];
             $imagem->banner = $eBanner;
             $imagem->assunto_id = $request['assunto_id'];
             $imagem->save();
@@ -328,12 +353,23 @@ class ImagemController extends Controller
                 }
             }
 
+            if ($request['fonte'] === '' || $request['fonte'] === null || $request['fonte'] === "null") {
+                $fonte = null;
+            } else {
+                $fonte = $request['fonte'];
+            }
 
             $imagem->nome = $request['nome'];
+            $imagem->nome_en = $request['nome_en'];
+            $imagem->nome_es = $request['nome_es'];
             $imagem->ordem = $ordemReal;
             $imagem->legenda = $request['legenda'];
-            $imagem->fonte = $request['fonte'];
+            $imagem->legenda_en = $request['legenda_en'];
+            $imagem->legenda_es = $request['legenda_es'];
+            $imagem->fonte = $fonte;
             $imagem->saibamais = $request['saibamais'];
+            $imagem->saibamais_en = $request['saibamais_en'];
+            $imagem->saibamais_es = $request['saibamais_es'];
             $imagem->banner = $eBanner;
             $imagem->assunto_id = $request['assunto_id'];
             $imagem->save();

@@ -52,6 +52,8 @@ class AssuntoController extends Controller
 
         $assuntoNovo = Assunto::create([
             'nome_assunto' => $request['nome_assunto'],
+            'nome_assunto_en' => $request['nome_assunto_en'],
+            'nome_assunto_es' => $request['nome_assunto_es'],
             'ordem_exibicao' => $ordemPassada,
         ]);
 
@@ -144,6 +146,8 @@ class AssuntoController extends Controller
 
             // Atualiza a ordem do assunto selecionado
             $assunto->nome_assunto = $request['nome_assunto'];
+            $assunto->nome_assunto_en = $request['nome_assunto_en'];
+            $assunto->nome_assunto_es = $request['nome_assunto_es'];
             $assunto->ordem_exibicao = $novaOrdem;
             $assunto->save();
 

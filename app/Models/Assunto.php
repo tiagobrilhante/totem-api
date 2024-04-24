@@ -10,7 +10,7 @@ class Assunto extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['nome_assunto', 'ordem_exibicao', 'acessos'];
+    protected $fillable = ['nome_assunto', 'nome_assunto_en','nome_assunto_es', 'ordem_exibicao', 'acessos'];
 
     protected $perPage = 6;
 
