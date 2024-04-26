@@ -16,7 +16,9 @@ class TotemConfigController extends Controller
             'nome_totem' => $config->nome_totem,
             'nome_totem_en' => $config->nome_totem_en,
             'nome_totem_es' => $config->nome_totem_es,
-            'selected_lang' => $config->selected_lang,
+            'permite_multi_lang' => $config->permite_multi_lang,
+            'en_habilitado' => $config->en_habilitado,
+            'es_habilitado' => $config->es_habilitado,
             'altura_detail' => $config->altura_detail,
             'largura_detail' => $config->largura_detail,
             'altura_index' => $config->altura_index,
@@ -41,6 +43,22 @@ class TotemConfigController extends Controller
 
         $totemConfig = TotemConfig::first();
         $totemConfig->nome_totem = $request['nome_totem'];
+
+        $permite_multi_lang = $request['permite_multi_lang'];
+        if (!$request['en_habilitado'] && !$request['es_habilitado']) {
+            $permite_multi_lang = false;
+        }
+
+
+        $totemConfig->en_habilitado = $request['en_habilitado'];
+        $totemConfig->es_habilitado = $request['es_habilitado'];
+
+        if (!$permite_multi_lang) {
+            $totemConfig->en_habilitado = false;
+            $totemConfig->es_habilitado = false;
+        }
+
+        $totemConfig->permite_multi_lang = $permite_multi_lang;
         $totemConfig->nome_totem_en = $request['nome_totem_en'];
         $totemConfig->nome_totem_es = $request['nome_totem_es'];
         $totemConfig->access_code = $request['access_code'];
@@ -109,17 +127,6 @@ class TotemConfigController extends Controller
         return response()->json([
             'mensagem' => 'BG alterado'
         ], 200);
-    }
-
-    public function selecionaLinguagem(Request $request)
-    {
-        $lang = $request['lang'];
-
-        $totemConfig = TotemConfig::first();
-        $totemConfig->selected_lang = $lang;
-        $totemConfig->save();
-
-        return $totemConfig;
     }
 
 }

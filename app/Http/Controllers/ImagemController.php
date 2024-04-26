@@ -14,11 +14,27 @@ class ImagemController extends Controller
     public function index()
     {
         return Imagem::all();
+    }
+
+    public function show($id)
+    {
+
+        $imagem = Imagem::find($id);
+
+        if (is_null($imagem)) {
+
+            return response()->json('', 204);
+
+        }
+
+        return response()->json($imagem);
 
     }
 
     public function store(Request $request)
     {
+
+        // imagem e ordem é obrigatório
 
         // instancio a nova imagem
         $imagem = new Imagem();
@@ -87,24 +103,49 @@ class ImagemController extends Controller
             }
         }
 
-        if ($request['fonte'] === '' || $request['fonte'] === null || $request['fonte'] === "null") {
-            $fonte = null;
-        } else {
-            $fonte = $request['fonte'];
-        }
+        //-------------------------------------------------//
+        //-------------------- nome -----------------------//
+        //-------------------------------------------------//
+
+        $nome = $this->validaCampo($request['nome'], 'string');
+        $nome_en = $this->validaCampo($request['nome_en'], 'string');
+        $nome_es = $this->validaCampo($request['nome_es'], 'string');
+
+        //-------------------------------------------------//
+        //------------------ legenda ----------------------//
+        //-------------------------------------------------//
+
+        $legenda = $this->validaCampo($request['legenda'], 'string');
+        $legenda_en = $this->validaCampo($request['legenda_en'], 'string');
+        $legenda_es = $this->validaCampo($request['legenda_es'], 'string');
+
+        //-------------------------------------------------//
+        //----------------- saiba mais --------------------//
+        //-------------------------------------------------//
+
+        $saibamais = $this->validaCampo($request['saibamais'], 'string');
+        $saibamais_en = $this->validaCampo($request['saibamais_en'], 'string');
+        $saibamais_es = $this->validaCampo($request['saibamais_es'], 'string');
+
+        //-------------------------------------------------//
+        //-------------------- fonte ----------------------//
+        //-------------------------------------------------//
+
+        $fonte = $this->validaCampo($request['fonte'], 'string');
+
 
         // save file data into database //
         $imagem->imagem = $destination_path . $filenameBase . '.' . $file_mime;
-        $imagem->nome = $request['nome'];
-        $imagem->nome_en = $request['nome_en'];
-        $imagem->nome_es = $request['nome_es'];
+        $imagem->nome = $nome;
+        $imagem->nome_en = $nome_en;
+        $imagem->nome_es = $nome_es;
         $imagem->ordem = $ordemReal;
-        $imagem->legenda = $request['legenda'];
-        $imagem->legenda_en = $request['legenda_en'];
-        $imagem->legenda_es = $request['legenda_es'];
-        $imagem->saibamais = $request['saibamais'];
-        $imagem->saibamais_en = $request['saibamais_en'];
-        $imagem->saibamais_es = $request['saibamais_es'];
+        $imagem->legenda = $legenda;
+        $imagem->legenda_en = $legenda_en;
+        $imagem->legenda_es = $legenda_es;
+        $imagem->saibamais = $saibamais;
+        $imagem->saibamais_en = $saibamais_en;
+        $imagem->saibamais_es = $saibamais_es;
         $imagem->fonte = $fonte;
         $imagem->banner = $eBanner;
         $imagem->assunto_id = $request['assunto_id'];
@@ -114,9 +155,13 @@ class ImagemController extends Controller
         $assuntoo = Assunto::find($request['assunto_id']);
 
         Historico::create([
-            'evento' => 'Foi inserida a imagem: '.$imagem->imagem . ', nome: '.$imagem->nome.', ordem: '. $imagem->ordem . ', legenda:' . $imagem->legenda . 'saiba mais: ' . $imagem->saibamais . ', assunto de referência: '. $assuntoo->nome_assunto,
-            'responsavel'=> Auth::user()->nome,
-            'user_id'=> Auth::user()->id
+            'evento' => 'Foi inserida a imagem: ' . $imagem->imagem . ', nome: ' . $imagem->nome .
+                ', ordem: ' . $imagem->ordem .
+                ', legenda:' . $imagem->legenda .
+                ', saiba mais: ' . $imagem->saibamais .
+                ', assunto de referência: ' . $assuntoo->nome_assunto,
+            'responsavel' => Auth::user()->nome,
+            'user_id' => Auth::user()->id
         ]);
 
         return response()
@@ -124,20 +169,7 @@ class ImagemController extends Controller
 
     }
 
-    public function show($id)
-    {
 
-        $imagem = Imagem::find($id);
-
-        if (is_null($imagem)) {
-
-            return response()->json('', 204);
-
-        }
-
-        return response()->json($imagem);
-
-    }
 
     public function update(Request $request)
     {
@@ -159,12 +191,41 @@ class ImagemController extends Controller
 
         // se é nulo ( retorna )
         if (is_null($imagem)) {
-
             return response()->json([
                 'erro' => 'Recurso não encontrado'
             ], 404);
-
         }
+
+        //-------------------------------------------------//
+        //-------------------- nome -----------------------//
+        //-------------------------------------------------//
+
+        $nome = $this->validaCampo($request['nome'], 'string');
+        $nome_en = $this->validaCampo($request['nome_en'], 'string');
+        $nome_es = $this->validaCampo($request['nome_es'], 'string');
+
+        //-------------------------------------------------//
+        //------------------ legenda ----------------------//
+        //-------------------------------------------------//
+
+        $legenda = $this->validaCampo($request['legenda'], 'string');
+        $legenda_en = $this->validaCampo($request['legenda_en'], 'string');
+        $legenda_es = $this->validaCampo($request['legenda_es'], 'string');
+
+        //-------------------------------------------------//
+        //----------------- saiba mais --------------------//
+        //-------------------------------------------------//
+
+        $saibamais = $this->validaCampo($request['saibamais'], 'string');
+        $saibamais_en = $this->validaCampo($request['saibamais_en'], 'string');
+        $saibamais_es = $this->validaCampo($request['saibamais_es'], 'string');
+
+        //-------------------------------------------------//
+        //-------------------- fonte ----------------------//
+        //-------------------------------------------------//
+
+        $fonte = $this->validaCampo($request['fonte'], 'string');
+
 
         // o assunto está mudando?
         if ($request['assunto_id'] != $imagem->assunto_id) {
@@ -234,7 +295,7 @@ class ImagemController extends Controller
             // a ordem é relativa ao assunto considerado, mas impacta no assunto anterior tb, pois vai ser removido um
             // começo testando se no assunto novo existem novas imagens
 
-            if ($ordemReal != $imagem->ordem ) {
+            if ($ordemReal != $imagem->ordem) {
                 if ($todasImagens->count() === 0) {
                     $ordemReal = 1;
                 } // aqui eu sei que existem imagens lá
@@ -268,26 +329,19 @@ class ImagemController extends Controller
                 $eBanner = 0;
             }
 
-            if ($request['fonte'] === '' || $request['fonte'] === null || $request['fonte'] === "null") {
-                $fonte = null;
-            } else {
-                $fonte = $request['fonte'];
-            }
-
-
             // se não estou mudando a imagem, mas o assunto muda
-            $imagem->nome = $request['nome'];
-            $imagem->nome_en = $request['nome_en'];
-            $imagem->nome_es = $request['nome_es'];
+            $imagem->nome = $nome;
+            $imagem->nome_en = $nome_en;
+            $imagem->nome_es = $nome_es;
             $imagem->ordem = $ordemReal;
 
-            $imagem->legenda = $request['legenda'];
-            $imagem->legenda_en = $request['legenda_en'];
-            $imagem->legenda_es = $request['legenda_es'];
+            $imagem->legenda = $legenda;
+            $imagem->legenda_en = $legenda_en;
+            $imagem->legenda_es = $legenda_es;
             $imagem->fonte = $fonte;
-            $imagem->saibamais = $request['saibamais'];
-            $imagem->saibamais_en = $request['saibamais_en'];
-            $imagem->saibamais_es = $request['saibamais_es'];
+            $imagem->saibamais = $saibamais;
+            $imagem->saibamais_en = $saibamais_en;
+            $imagem->saibamais_es = $saibamais_es;
             $imagem->banner = $eBanner;
             $imagem->assunto_id = $request['assunto_id'];
             $imagem->save();
@@ -298,7 +352,11 @@ class ImagemController extends Controller
 
             // se eu for mudar a imagem entro aqui
             if ($request['imagem'] !== 'undefined') {
-                unlink($imagem->imagem);
+
+                if (file_exists($imagem->imagem)) {
+                    unlink($imagem->imagem);
+                }
+
                 $destination_path = 'imagens/' . $request['assunto_id'] . '/';
                 $filenameBaseAjuste = 'img_' . time();
                 $file = $request['imagem'];
@@ -353,23 +411,18 @@ class ImagemController extends Controller
                 }
             }
 
-            if ($request['fonte'] === '' || $request['fonte'] === null || $request['fonte'] === "null") {
-                $fonte = null;
-            } else {
-                $fonte = $request['fonte'];
-            }
 
-            $imagem->nome = $request['nome'];
-            $imagem->nome_en = $request['nome_en'];
-            $imagem->nome_es = $request['nome_es'];
+            $imagem->nome = $nome;
+            $imagem->nome_en = $nome_en;
+            $imagem->nome_es = $nome_es;
             $imagem->ordem = $ordemReal;
-            $imagem->legenda = $request['legenda'];
-            $imagem->legenda_en = $request['legenda_en'];
-            $imagem->legenda_es = $request['legenda_es'];
+            $imagem->legenda = $legenda;
+            $imagem->legenda_en = $legenda_en;
+            $imagem->legenda_es = $legenda_es;
             $imagem->fonte = $fonte;
-            $imagem->saibamais = $request['saibamais'];
-            $imagem->saibamais_en = $request['saibamais_en'];
-            $imagem->saibamais_es = $request['saibamais_es'];
+            $imagem->saibamais = $saibamais;
+            $imagem->saibamais_en = $saibamais_en;
+            $imagem->saibamais_es = $saibamais_es;
             $imagem->banner = $eBanner;
             $imagem->assunto_id = $request['assunto_id'];
             $imagem->save();
@@ -393,25 +446,41 @@ class ImagemController extends Controller
 
     public function destroy($id)
     {
-
         $imagem = Imagem::find($id);
-
         $assuntoo = Assunto::find($imagem->assunto_id);
 
+        // verifico a ordem das imagens
+        $todasImagens = Imagem::where('id', '!=', $id)->where('assunto_id', $imagem->assunto_id)->orderBy('ordem')->get();
+
+        $ordemImgDel = $imagem->ordem;
+
+        foreach ($todasImagens as $ti) {
+            // em todass as imagens eu verifico
+            // se a ordem é maior ou igual a algo que já existe
+            if ($ti->ordem >= $ordemImgDel) {
+                // eu somo a ordem em 1, empurrando todas as outras para depois dela
+                --$ti->ordem;
+                // e salvo
+                $ti->save();
+            }
+        }
 
         Historico::create([
-            'evento' => 'Foi excluída a imagem: '.$imagem->imagem . ', nome: '.$imagem->nome.', ordem: '. $imagem->ordem . ', legenda:' . $imagem->legenda . ', assunto de referência: '. $assuntoo->nome_assunto,
-            'responsavel'=> Auth::user()->nome,
-            'user_id'=> Auth::user()->id
+            'evento' => 'Foi excluída a imagem: ' . $imagem->imagem . ', nome: ' . $imagem->nome . ', ordem: ' . $imagem->ordem . ', legenda:' . $imagem->legenda . ', assunto de referência: ' . $assuntoo->nome_assunto,
+            'responsavel' => Auth::user()->nome,
+            'user_id' => Auth::user()->id
         ]);
 
-
-        unlink($imagem->imagem);
-
+        // se a imagem existir eu deleto
+        if (file_exists($imagem->imagem)) {
+            unlink($imagem->imagem);
+        }
 
         // tenho que verificar as novas ordens das imagens
 
         $imagem = Imagem::destroy($id);
+
+        $retorno = Imagem::where('assunto_id', $assuntoo->id)->orderBy('ordem')->get();
 
         if ($imagem === 0) {
 
@@ -420,7 +489,7 @@ class ImagemController extends Controller
             ], 404);
 
         } else {
-            return response()->json('', 204);
+            return response()->json($retorno, 204);
         }
 
     }
@@ -438,6 +507,23 @@ class ImagemController extends Controller
         $imagem->save();
 
         return $imagem;
+    }
+
+    public function validaCampo($campo, $tipo)
+    {
+        if ($campo === '' || $campo === 'null') {
+            $campo = null;
+        }
+        // String e int
+        if ($tipo === 'int') {
+            if ($campo === 0 || $campo === '0' || $campo === 'null' || $campo === null) {
+                $campo = null;
+            } else {
+                $campo = (int)$campo;
+            }
+        }
+
+        return $campo;
     }
 
 }

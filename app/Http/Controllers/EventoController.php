@@ -18,112 +18,41 @@ class EventoController extends Controller
 
     }
 
+    public function show($id)
+    {
+        $imagem = Imagem::find($id);
+        if (is_null($imagem)) {
+            return response()->json('', 204);
+        }
+        return response()->json($imagem);
+    }
 
     public function store(Request $request)
     {
-        $eventoTeste = 0;
 
-        if ($request['imagem'] === null) {
-            $eventoTeste = 1;
-        }
+        //--------------------------------//
+        //------- DIA - MES - ANO --------//
+        //--------------------------------//
 
-        if ($request['imagem'] === 'undefined') {
-            $eventoTeste = 1;
-        }
+        /*
+         * devo me certificar que se não existir ano, mas veio dia e mes, a informação não pode ser persistida
+         * o ano tem que sempre existir
+         * se vier dia sem mês, isso tb é um erro
+         * os casos possíveis são
+         * --- dia-mes-ano
+         * --- mes-ano
+         * --- ano
+         */
 
-        if ($request['imagem'] === '') {
-            $eventoTeste = 1;
-        }
-        $evento = new Evento();
+        // dia
+        $dia = $this->validaCampo($request['dia'], 'string');
+        // mes
+        $mes = $this->validaCampo($request['mes'], 'string');
+        // ano
+        // anos são obrigatórios em eventos
+        $ano = $request['ano'];
 
-        $saibamais = $request['saibamais'];
-        if ($request['saibamais'] == '' || $request['saibamais'] == null || $request['saibamais'] == 'null') {
-            $saibamais = null;
-
-        }
-
-        $saibamais_en = $request['saibamais_en'];
-        if ($request['saibamais_en'] == '' || $request['saibamais_en'] == null || $request['saibamais_en'] == 'null') {
-            $saibamais_en = null;
-
-        }
-
-        $saibamais_es = $request['saibamais_es'];
-        if ($request['saibamais_es'] == '' || $request['saibamais_es'] == null || $request['saibamais_es'] == 'null') {
-            $saibamais_es = null;
-
-        }
-
-        $nome_en = $request['nome_en'];
-        if ($request['nome_en'] == '' || $request['nome_en'] == null || $request['nome_en'] == 'null') {
-            $nome_en = null;
-
-        }
-
-        $nome_es = $request['nome_es'];
-        if ($request['nome_es'] == '' || $request['nome_es'] == null || $request['nome_es'] == 'null') {
-            $nome_es = null;
-
-        }
-
-        $legenda_en = $request['legenda_en'];
-        if ($request['legenda_en'] == '' || $request['legenda_en'] == null || $request['legenda_en'] == 'null') {
-            $legenda_en = null;
-
-        }
-
-        $legenda_es = $request['legenda_es'];
-        if ($request['legenda_es'] == '' || $request['legenda_es'] == null || $request['legenda_es'] == 'null') {
-            $legenda_es = null;
-
-        }
-
-        if ($eventoTeste === 0) {
-            // upload file //
-            $file = $request['imagem'];
-            $destination_path = 'eventos/' . $request['ano'] . '/';
-            $file_mime = $file->extension();
-            $filenameBase = 'img_' . time();
-            $file->move($destination_path, $filenameBase . '.' . $file_mime);
-            $evento->imagem = $destination_path . $filenameBase . '.' . $file_mime;
-
-            $le_fonte = $request['fonteimagempcp'];
-            if ($request['fonteimagempcp'] == '' || $request['fonteimagempcp'] == null || $request['fonteimagempcp'] == 'null') {
-                $le_fonte = null;
-
-            }
-
-            $evento->fonteimagempcp = $le_fonte;
-        } else {
-            $evento->imagem = null;
-            $evento->fonteimagempcp = null;
-        }
-
-        $dia = null;
-        if ($request['dia'] != '') {
-            $dia = $request['dia'];
-        }
-
-        $mes = null;
-        if ($request['mes'] != '') {
-            $mes = $request['mes'];
-        }
-
-        $evento->dia = $dia;
-        $evento->mes = $mes;
-        $evento->ano = $request['ano'];
-        $evento->nome = $request['nome'];
-        $evento->nome_en = $nome_en;
-        $evento->nome_es = $nome_es;
-        $evento->legenda = $request['legenda'];
-        $evento->legenda_en = $legenda_en;
-        $evento->legenda_es = $legenda_es;
-        $evento->saibamais = $saibamais;
-        $evento->saibamais_en = $saibamais_en;
-        $evento->saibamais_es = $saibamais_es;
-        $evento->save();
-
-
+        // formatando os dados para gerar o histórico
         $dataEventoFormatado = '';
         if ($mes !== null && $dia !== null) {
             $dataEventoFormatado = $dia . '/' . $mes . '/' . $request['ano'];
@@ -135,39 +64,187 @@ class EventoController extends Controller
             $dataEventoFormatado = $request['ano'];
         }
 
+        //--------------------------------//
+        //--------Testes de Img ----------//
+        //--------------------------------//
 
+        $eventoTeste = 0;
+
+        // tenho que saber se veio ou não uma imagem
+        if ($request['imagem'] === null || $request['imagem'] === 'undefined' || $request['imagem'] === '') {
+            $eventoTeste = 1;
+        }
+
+        //--------------------------------//
+        //------------- NOME -------------//
+        //--------------------------------//
+
+        // pt_br
+        // nomes em pt_br são obrigatórios
+        //mtenho que verificar se existe nome em pt_be para solicitar que existam nomes em outra linguas
+        $nome = $request['nome'];
+
+        // en
+        $nome_en = $this->validaCampo($request['nome_en'], 'string');
+        // es
+        $nome_es = $this->validaCampo($request['nome_es'], 'string');
+
+        //--------------------------------//
+        //----------- LEGENDA ------------//
+        //--------------------------------//
+
+        //pt_br
+        //legendas em ptbr não são obrigatórias
+        $legenda = $this->validaCampo($request['legenda'], 'string');
+
+        // en
+        $legenda_en = $this->validaCampo($request['legenda_en'], 'string');
+
+        // es
+        $legenda_es = $this->validaCampo($request['legenda_es'], 'string');
+
+        //--------------------------------//
+        //-----------SAIBA MAIS ----------//
+        //--------------------------------//
+
+        // pt_br
+        /*
+        pode ou não existir saiba mais em pt_br
+        devo me certificar de como lidar com um evento que tenha saiba mais em outros idiomas, mas não tenha em pt_br
+        devo ou não permitir?
+        */
+        $saibamais = $this->validaCampo($request['saibamais'], 'string');
+
+        // en
+        $saibamais_en = $this->validaCampo($request['saibamais_en'], 'string');
+
+        // es
+        $saibamais_es = $this->validaCampo($request['saibamais_es'], 'string');
+
+        // inicio a construção do evento
+        $evento = new Evento();
+
+        // envio a imagem se ela veio no form
+        if ($eventoTeste === 0) {
+            // upload file //
+            $file = $request['imagem'];
+            $destination_path = 'eventos/' . $request['ano'] . '/';
+            $file_mime = $file->extension();
+            $filenameBase = 'img_' . time();
+            $file->move($destination_path, $filenameBase . '.' . $file_mime);
+            $evento->imagem = $destination_path . $filenameBase . '.' . $file_mime;
+
+            // só vai existir uma fonte de imagem se veio uma i magem
+            $evento->fonteimagempcp = $this->validaCampo($request['fonteimagempcp'], 'string');
+        } else {
+            $evento->imagem = null;
+            $evento->fonteimagempcp = null;
+        }
+
+        // salvo o evento
+        $evento->dia = $dia;
+        $evento->mes = $mes;
+        $evento->ano = $ano;
+        $evento->nome = $nome;
+        $evento->nome_en = $nome_en;
+        $evento->nome_es = $nome_es;
+        $evento->legenda = $legenda;
+        $evento->legenda_en = $legenda_en;
+        $evento->legenda_es = $legenda_es;
+        $evento->saibamais = $saibamais;
+        $evento->saibamais_en = $saibamais_en;
+        $evento->saibamais_es = $saibamais_es;
+        $evento->save();
+
+        // criando histórico do evento (melhorar a geração de históricos
         Historico::create([
-            'evento' => 'Foi criado o evento: ' . $evento->nome . ', data: ' . $dataEventoFormatado . ', imagem: ' . $evento->imagem .', fonte imagem: '. $evento->fonteimagempcp. ', legenda:' . $evento->legenda . ', Saiba Mais: ' . $evento->saibamais,
+            'evento' => 'Foi criado o evento: ' . $evento->nome . ', data: ' . $dataEventoFormatado . ', imagem: ' . $evento->imagem . ', fonte imagem: ' . $evento->fonteimagempcp . ', legenda:' . $evento->legenda . ', Saiba Mais: ' . $evento->saibamais,
             'responsavel' => Auth::user()->nome,
             'user_id' => Auth::user()->id
         ]);
 
-
-
+        // retorna o evento recém criado
         return response()
             ->json($evento, 201);
-
-    }
-
-    public function show($id)
-    {
-
-        $imagem = Imagem::find($id);
-
-        if (is_null($imagem)) {
-
-            return response()->json('', 204);
-
-        }
-
-        return response()->json($imagem);
-
     }
 
     public function update(Request $request)
     {
-
+        // encontro o evento
         $evento = Evento::find($request['id']);
+
+        //--------------------------------//
+        //------- DIA - MES - ANO --------//
+        //--------------------------------//
+
+        // dia
+        $requestDia = $this->validaCampo($request['dia'], 'int');
+
+        // mes
+        $requestMes = $this->validaCampo($request['mes'], 'int');
+
+        // anos são obrigatórios
+        $requestAno = $request['ano'];
+        $requestAno = (int)$requestAno;
+
+        //--------------------------------//
+        //------- IMAGEM E FONTE ---------//
+        //--------------------------------//
+
+        // testando se veio ou não a imagem
+        $eventoTeste = 0;
+
+        if ($request['imagem'] === null || $request['imagem'] === '' || $request['imagem'] === 'null' || $request['imagem'] === 'undefined') {
+            $eventoTeste = 1;
+        }
+        if ($eventoTeste === 0) {
+            $fonteimagempcp = $this->validaCampo($request['fonteimagempcp'], 'string');
+        } else {
+            $fonteimagempcp = null;
+        }
+
+        //--------------------------------//
+        //------------ Nome -----------//
+        //--------------------------------//
+
+        // pt_br nomes são obrigatórios
+        $nome = $request['nome'];
+
+        // en
+        $nome_en = $this->validaCampo($request['nome_en'], 'string');
+
+        //es
+        $nome_es = $this->validaCampo($request['nome_es'], 'string');
+
+        //--------------------------------//
+        //------------ Legenda -----------//
+        //--------------------------------//
+
+        // pt_br
+        $legenda = $this->validaCampo($request['legenda'], 'string');
+
+        // en
+        $legenda_en = $this->validaCampo($request['legenda_en'], 'string');
+
+        //es
+        $legenda_es = $this->validaCampo($request['legenda_es'], 'string');
+
+        //--------------------------------//
+        //---------- Saiba Mais ----------//
+        //--------------------------------//
+
+        // pt_br
+        $saibamais = $this->validaCampo($request['saibamais'], 'string');
+
+        // en
+        $saibamais_en = $this->validaCampo($request['saibamais_en'], 'string');
+
+        //es
+        $saibamais_es = $this->validaCampo($request['saibamais_es'], 'string');
+
+        //--------------------------------//
+        //-- Preparacoes para Historico --//
+        //--------------------------------//
 
         $dataEventoFormatadoAntigo = '';
         $dataEventoFormatadoNovo = '';
@@ -175,22 +252,6 @@ class EventoController extends Controller
         $legendaOriginalAntiga = $evento->legenda;
         $saibaMaisOriginalAntiga = $evento->saibamais;
         $fonteImagemOriginalAntiga = $evento->fonteimagempcp;
-
-        $requestDia = $request['dia'];
-        if ($requestDia == "null" || $requestDia == '') {
-            $requestDia = null;
-        } else {
-            $requestDia = (int)$requestDia;
-        }
-        $requestMes = $request['mes'];
-        if ($requestMes == "null" || $requestMes == '') {
-            $requestMes = null;
-        } else {
-            $requestMes = (int)$requestMes;
-        }
-        $requestAno = $request['ano'];
-        $requestAno = (int)$requestAno;
-
 
         if ($evento->mes !== null && $evento->dia !== null) {
             $dataEventoFormatadoAntigo = $evento->dia . '/' . $evento->mes . '/' . $evento->ano;
@@ -202,112 +263,44 @@ class EventoController extends Controller
             $dataEventoFormatadoAntigo = $evento->ano;
         }
 
-        if (($request['mes'] !== '' && $request['mes'] != "null") && ($request['dia'] !== '' && $request['dia'] != "null")) {
-            $dataEventoFormatadoNovo = $request['dia'] . '/' . $request['mes'] . '/' . $request['ano'];
-        }
-        if (($request['mes'] !== '' && $request['mes'] != "null") && ($request['dia'] === '' || $request['dia'] == "null")) {
-            $dataEventoFormatadoNovo = $request['mes'] . '/' . $request['ano'];
-        }
-        if (($request['mes'] === '' || $request['mes'] == "null") && ($request['dia'] === '' || $request['dia'] == "null")) {
-            $dataEventoFormatadoNovo = $request['ano'];
+        if (($requestMes !== '' && $requestMes !== 'null') && ($requestDia !== '' && $requestDia !== 'null')) {
+            $dataEventoFormatadoNovo = $requestDia . '/' . $requestMes . '/' . $requestAno;
         }
 
-        if ($evento->dia !== $requestDia) {
-            $evento->dia = $requestDia;
+        if (($requestMes !== '' && $requestMes !== 'null') && ($requestDia === '' || $requestDia === 'null')) {
+            $dataEventoFormatadoNovo = $requestMes . '/' . $requestAno;
         }
-        if ($evento->mes !== $requestMes) {
-            $evento->mes = $requestMes;
-        }
-        if ($evento->ano !== $requestAno) {
-            $evento->ano = $requestAno;
-        }
-        if ($evento->nome !== $request['nome']) {
-            $evento->nome = $request['nome'];
-        }
-        if ($evento->nome_en !== $request['nome_en']) {
-            $evento->nome_en = $request['nome_en'];
-        }
-        if ($evento->nome_es !== $request['nome_es']) {
-            $evento->nome_es = $request['nome_es'];
-        }
-        if ($evento->legenda !== $request['legenda']) {
-            $evento->legenda = $request['legenda'];
-        }
-        if ($evento->legenda_en !== $request['legenda_en']) {
-            $evento->legenda_en = $request['legenda_en'];
-        }
-        if ($evento->legenda_es !== $request['legenda_es']) {
-            $evento->legenda_es = $request['legenda_es'];
+        if (($requestMes === '' || $requestMes === 'null') && ($requestDia === '' || $requestDia === 'null')) {
+            $dataEventoFormatadoNovo = $requestAno;
         }
 
-        $saibamais = $request['saibamais'];
-        if ($evento->saibamais !== $request['saibamais']) {
+        //--------------------------------//
+        //-- verificações de alteraçao ---//
+        //--------------------------------//
 
-            if ($request['saibamais'] == '' || $request['saibamais'] == null || $request['saibamais'] == 'null') {
-                $saibamais = null;
-
-            }
-            $evento->saibamais = $saibamais;
-        }
-
-        $saibamais_en = $request['saibamais_en'];
-        if ($evento->saibamais_en !== $request['saibamais_en']) {
-
-            if ($request['saibamais_en'] == '' || $request['saibamais_en'] == null || $request['saibamais_en'] == 'null') {
-                $saibamais_en = null;
-
-            }
-            $evento->saibamais_en = $saibamais_en;
-        }
-
-        $saibamais_es = $request['saibamais_es'];
-        if ($evento->saibamais_es !== $request['saibamais_es']) {
-
-            if ($request['saibamais_es'] == '' || $request['saibamais_es'] == null || $request['saibamais_es'] == 'null') {
-                $saibamais_es = null;
-
-            }
-            $evento->saibamais_es = $saibamais_es;
-        }
-
-        if ($evento->fonteimagempcp !== $request['fonteimagempcp']) {
-
-            $fonteimagempcp = $request['fonteimagempcp'];
-            if ($request['fonteimagempcp'] == '' || $request['fonteimagempcp'] == null || $request['fonteimagempcp'] == 'null') {
-                $fonteimagempcp = null;
-
-            }
-
-            $evento->saibamais = $saibamais;
-            $evento->fonteimagempcp = $fonteimagempcp;
-        }
-
-        $eventoTeste = 0;
-
-        if ($request['imagem'] === null) {
-            $eventoTeste = 1;
-        }
-
-        if ($request['imagem'] === 'null') {
-            $eventoTeste = 1;
-        }
-
-        if ($request['imagem'] === 'undefined') {
-            $eventoTeste = 1;
-        }
-
-        if ($request['imagem'] === '') {
-            $eventoTeste = 1;
-        }
+        $evento->dia = $requestDia;
+        $evento->mes = $requestMes;
+        $evento->ano = $requestAno;
+        $evento->nome = $nome;
+        $evento->nome_en = $nome_en;
+        $evento->nome_es = $nome_es;
+        $evento->legenda = $legenda;
+        $evento->legenda_en = $legenda_en;
+        $evento->legenda_es = $legenda_es;
+        $evento->saibamais = $saibamais;
+        $evento->saibamais_en = $saibamais_en;
+        $evento->saibamais_es = $saibamais_es;
+        $evento->fonteimagempcp = $fonteimagempcp;
 
 
+        // troca a imagem
         if ($eventoTeste === 0) {
-            // upload file //
-
+            // apago a imagem anterior
             if ($evento->imagem !== null) {
                 unlink($evento->imagem);
             }
 
+            // subo a nova imagem
             $file = $request->file('imagem');
             $destination_path = 'eventos/' . $request['ano'] . '/';
             $file_mime = $file->extension();
@@ -315,11 +308,20 @@ class EventoController extends Controller
             $file->move($destination_path, $filenameBase . '.' . $file_mime);
             $evento->imagem = $destination_path . $filenameBase . '.' . $file_mime;
         }
+
+        // cria o hstorico (preciso melhorar o processo de criação de históricos
         Historico::create([
-            'evento' => 'Foi alterado o evento de: ' . $evento->nome . ' para: ' . $request['nome'] . ', data de: ' . $dataEventoFormatadoAntigo . ', para: ' . $dataEventoFormatadoNovo . ', imagem de: ' . $caminhoImagemAntigo . ', para: ' . $evento->imagem . ', legenda de: ' . $legendaOriginalAntiga . ', para: ' . $evento->legenda . ', Saiba Mais de: ' . $saibaMaisOriginalAntiga . ', para: ' . $evento->saibamais,
+            'evento' =>
+                'Foi alterado o evento de: ' . $evento->nome . ' para: ' . $request['nome'] .
+                ', data de: ' . $dataEventoFormatadoAntigo . ', para: ' . $dataEventoFormatadoNovo .
+                ', imagem de: ' . $caminhoImagemAntigo . ', para: ' . $evento->imagem .
+                ', legenda de: ' . $legendaOriginalAntiga . ', para: ' . $evento->legenda .
+                ', Saiba Mais de: ' . $saibaMaisOriginalAntiga . ', para: ' . $evento->saibamais,
             'responsavel' => Auth::user()->nome,
             'user_id' => Auth::user()->id
         ]);
+
+        //salva e devolve
         $evento->save();
         return $evento;
     }
@@ -327,16 +329,13 @@ class EventoController extends Controller
     public function destroy($id)
     {
 
-
         $evento = Evento::find($id);
-
 
         Historico::create([
             'evento' => 'Foi excluído o evento : ' . $evento->nome,
             'responsavel' => Auth::user()->nome,
             'user_id' => Auth::user()->id
         ]);
-
 
         if ($evento->imagem !== null) {
             unlink($evento->imagem);
@@ -369,7 +368,6 @@ class EventoController extends Controller
         $evento->save();
 
         return $evento;
-
 
     }
 
@@ -408,9 +406,8 @@ class EventoController extends Controller
 
             $imagem = $this->retornaBanner($jValue);
 
-
-            $juca = ['ano' => $arrayDeArrays[0][$j], 'eventos' => $eventos, 'imagem' => $imagem];
-            $montagemRetorno[] = $juca;
+            $grupo = ['ano' => $arrayDeArrays[0][$j], 'eventos' => $eventos, 'imagem' => $imagem];
+            $montagemRetorno[] = $grupo;
         }
 
         $temProxPag = false;
@@ -457,8 +454,8 @@ class EventoController extends Controller
 
             $imagem = $this->retornaBanner($jValue);
 
-            $juca = ['ano' => $arrayDeArrays[$pag - 1][$j], 'eventos' => Evento::where('ano', $arrayDeArrays[$pag - 1][$j])->get()->load('imagensAdicionais'), 'imagem' => $imagem];
-            $montagemRetorno[] = $juca;
+            $grupo = ['ano' => $arrayDeArrays[$pag - 1][$j], 'eventos' => Evento::where('ano', $arrayDeArrays[$pag - 1][$j])->get()->load('imagensAdicionais'), 'imagem' => $imagem];
+            $montagemRetorno[] = $grupo;
         }
 
         $temProxPag = false;
@@ -468,7 +465,6 @@ class EventoController extends Controller
         }
 
         return [$montagemRetorno, (int)$pag, $temProxPag];
-
 
     }
 
@@ -495,36 +491,21 @@ class EventoController extends Controller
 
         $eventoTeste = 0;
 
-        if ($request['imagem'] === null) {
+        if ($request['imagem'] === null || $request['imagem'] === 'undefined' || $request['imagem'] === '') {
             $eventoTeste = 1;
         }
 
-        if ($request['imagem'] === 'undefined') {
-            $eventoTeste = 1;
+        if ($eventoTeste === 0) {
+            $fonte = $this->validaCampo($request['fonte'], 'string');
+        } else {
+            $fonte = null;
         }
 
-        if ($request['imagem'] === '') {
-            $eventoTeste = 1;
-        }
         $imagemAdicional = new ImagemEventoAdicional();
 
-        if($request['descricao'] === '' || $request['descricao'] === null || $request['descricao'] === 'null') {
-            $descricao = null;
-        } else{
-            $descricao = $request['descricao'];
-        }
-
-        if($request['descricao_en'] === '' || $request['descricao_en'] === null || $request['descricao_en'] === 'null') {
-            $descricao_en = null;
-        } else{
-            $descricao_en = $request['descricao_en'];
-        }
-
-        if($request['descricao_es'] === '' || $request['descricao_es'] === null || $request['descricao_es'] === 'null') {
-            $descricao_es = null;
-        } else{
-            $descricao_es = $request['descricao_es'];
-        }
+        $descricao = $this->validaCampo($request['descricao'], 'string');
+        $descricao_en = $this->validaCampo($request['descricao_en'], 'string');
+        $descricao_es = $this->validaCampo($request['descricao_es'], 'string');
 
         if ($eventoTeste === 0) {
             // upload file //
@@ -534,7 +515,7 @@ class EventoController extends Controller
             $filenameBase = 'img_' . time();
             $file->move($destination_path, $filenameBase . '.' . $file_mime);
             $imagemAdicional->imagem = $destination_path . $filenameBase . '.' . $file_mime;
-            $imagemAdicional->fonte = $request['fonte'];
+            $imagemAdicional->fonte = $fonte;
             $imagemAdicional->descricao = $descricao;
             $imagemAdicional->descricao_en = $descricao_en;
             $imagemAdicional->descricao_es = $descricao_es;
@@ -572,7 +553,23 @@ class EventoController extends Controller
         $evento = Evento::find($request['id']);
         $evento->acessos++;
         $evento->save();
-
         return $evento;
+    }
+
+    public function validaCampo($campo, $tipo)
+    {
+        if ($campo === '' || $campo === 'null') {
+            $campo = null;
+        }
+        // String e int
+        if ($tipo === 'int') {
+            if ($campo === 0 || $campo === '0' || $campo === 'null' || $campo === null) {
+                $campo = null;
+            } else {
+                $campo = (int)$campo;
+            }
+        }
+
+        return $campo;
     }
 }

@@ -18,13 +18,12 @@
 use Laravel\Lumen\Routing\Router;
 
 $router->get('/', function () use ($router) {
-    return '<h1>API EBTotem</h1> <b>Framework da Api:</b> ' . $router->app->version() . '<br> <b>Versão da api:</b> 1.3<br><b>Desenvolvedor: </b> TC Brilhante <br>Todos os Direitos dessa API pertencem ao Exército Brasileiro. <br> Todo o poder emana do código.';
+    return '<h1>API EBTotem</h1> <b>Framework da Api:</b> ' . $router->app->version() . '<br> <b>Versão da api:</b> 1.4<br><b>Desenvolvedor: </b> TC Brilhante <br>Todos os Direitos dessa API pertencem ao Exército Brasileiro. <br> Todo o poder emana do código.';
 });
 
 $router->post('/api/login', 'TokenController@gerarToken');
 
 $router->post('/api/totemconfig/admarea', 'TotemConfigController@acesso');
-$router->post('/api/totemconfig/selectlang', 'TotemConfigController@selecionaLinguagem');
 $router->get('/api/totemconfig', 'TotemConfigController@index');
 $router->get('/api/assunto/principal', 'AssuntoController@totemPcp');
 $router->get('/api/evento/principal', 'EventoController@totemPcp');
