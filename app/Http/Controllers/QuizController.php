@@ -66,6 +66,8 @@ class QuizController extends Controller
 
         $quiz = Quiz::create([
             'cabecalho' => $request['cabecalho'],
+            'cabecalho_en' => $request['cabecalho_en'],
+            'cabecalho_es' => $request['cabecalho_es'],
             'maxscore' => (int)$request['maxscore'],
             'ativo' => false
         ]);
@@ -75,6 +77,8 @@ class QuizController extends Controller
 
             $perguntaCriada = QuizPergunta::create([
                 'enunciado' => $dadosPergunta['enunciado'],
+                'enunciado_en' => $dadosPergunta['enunciado_en'],
+                'enunciado_es' => $dadosPergunta['enunciado_es'],
                 'quiz_id' => $quiz->id
             ]);
 
@@ -82,6 +86,8 @@ class QuizController extends Controller
             foreach ($dadosPergunta['respostas'] as $dadosResposta) {
                 QuizResposta::create([
                     'resposta' => $dadosResposta['resposta'],
+                    'resposta_en' => $dadosResposta['resposta_en'],
+                    'resposta_es' => $dadosResposta['resposta_es'],
                     'correta' => $dadosResposta['correta'], // Atenção à chave 'correta'
                     'quiz_pergunta_id' => $perguntaCriada->id
                 ]);
@@ -127,7 +133,12 @@ class QuizController extends Controller
             // Atualiza ou cria a pergunta
             $pergunta = QuizPergunta::updateOrCreate(
                 ['id' => $dadosPergunta['id'] ?? null],
-                ['enunciado' => $dadosPergunta['enunciado'], 'quiz_id' => $quiz->id]
+                [
+                    'enunciado' => $dadosPergunta['enunciado'],
+                    'enunciado_en' => $dadosPergunta['enunciado_en'],
+                    'enunciado_es' => $dadosPergunta['enunciado_es'],
+                    'quiz_id' => $quiz->id
+                ]
             );
 
             $perguntasIds[] = $pergunta->id;
@@ -138,6 +149,8 @@ class QuizController extends Controller
                     ['id' => $dadosResposta['id'] ?? null],
                     [
                         'resposta' => $dadosResposta['resposta'],
+                        'resposta_en' => $dadosResposta['resposta_en'],
+                        'resposta_es' => $dadosResposta['resposta_es'],
                         'correta' => $dadosResposta['correta'],
                         'quiz_pergunta_id' => $pergunta->id
                     ]
@@ -151,6 +164,8 @@ class QuizController extends Controller
 
         $quiz->update([
             'cabecalho' => $request['cabecalho'],
+            'cabecalho_en' => $request['cabecalho_en'],
+            'cabecalho_es' => $request['cabecalho_es'],
             'maxscore' => (int)$request['maxscore']
         ]);
 

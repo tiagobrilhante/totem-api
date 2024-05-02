@@ -10,7 +10,7 @@ class Quiz extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['cabecalho','maxscore','ativo'];
+    protected $fillable = ['cabecalho','cabecalho_en','cabecalho_es','maxscore','ativo'];
 
 
     public function perguntas()

@@ -10,7 +10,7 @@ class QuizResposta extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['resposta','correta','quiz_pergunta_id'];
+    protected $fillable = ['resposta', 'resposta_en','resposta_es','correta','quiz_pergunta_id'];
 
 
     public function pergunta()
