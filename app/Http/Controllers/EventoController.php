@@ -197,11 +197,8 @@ class EventoController extends Controller
         if ($request['imagem'] === null || $request['imagem'] === '' || $request['imagem'] === 'null' || $request['imagem'] === 'undefined') {
             $eventoTeste = 1;
         }
-        if ($eventoTeste === 0) {
-            $fonteimagempcp = $this->validaCampo($request['fonteimagempcp'], 'string');
-        } else {
-            $fonteimagempcp = null;
-        }
+
+        $fonteimagempcp = $this->validaCampo($request['fonteimagempcp'], 'string');
 
         //--------------------------------//
         //------------ Nome -----------//
